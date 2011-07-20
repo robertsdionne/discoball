@@ -325,8 +325,6 @@ discoball.Renderer.ROTATION = Math.PI/64;
 discoball.Renderer.prototype.onDraw = function(gl) {
   this.handleKeys();
 
-  discoball.global.document.getElementById('t').innerText = this.blendT_;
-
   if (this.index_ == 0) {
     // Canvas 0: Render the full shadow mapped scene.
     this.scenePass(gl);
