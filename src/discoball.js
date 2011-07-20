@@ -5,27 +5,27 @@
  * @author robertsdionne@gmail.com (Robert Scott Dionne)
  */
 
-animus.load = function() {
-  var keys = new animus.Keys(document);
+discoball.load = function() {
+  var keys = new discoball.Keys(document);
   new webgl.App(window, keys)
       .install({
-        'c0': new animus.Renderer(keys, 0)
+        'c0': new discoball.Renderer(keys, 0)
       }, 'stats');
 };
-window.onload = animus.load;
+window.onload = discoball.load;
 
 
 /**
  * @constructor
  */
-animus.Renderer = function(keys, index) {
+discoball.Renderer = function(keys, index) {
   /**
    * @type {number}
    */
   this.index_ = index;
 
   /**
-   * @type {!animus.Keys}
+   * @type {!discoball.Keys}
    */
   this.keys_ = keys;
 
@@ -45,16 +45,16 @@ animus.Renderer = function(keys, index) {
   this.floor_ = null;
 
   /**
-   * @type {animus.Node}
+   * @type {discoball.Node}
    */
   this.skeleton_ = null;
 
   /**
-   * @type {!animus.Animator}
+   * @type {!discoball.Animator}
    */
-  this.animator_ = new animus.Animator();
+  this.animator_ = new discoball.Animator();
 };
-animus.inherits(animus.Renderer, webgl.Renderer);
+discoball.inherits(discoball.Renderer, webgl.Renderer);
 
 
 /**
@@ -62,22 +62,22 @@ animus.inherits(animus.Renderer, webgl.Renderer);
  * @param {number} width
  * @param {number} height
  */
-animus.Renderer.prototype.onChange = function(gl, width, height) {
+discoball.Renderer.prototype.onChange = function(gl, width, height) {
   gl.viewport(0, 0, width, height);
   var aspect = width/height;
   this.projection_ = this.getFrustumMatrix(-aspect, aspect, -1, 1, 1, 1000);
 };
 
 
-animus.Renderer.prototype.getShaderSource = function(id) {
-  return animus.global.document.getElementById(id).text;
+discoball.Renderer.prototype.getShaderSource = function(id) {
+  return discoball.global.document.getElementById(id).text;
 };
 
 
 /**
  * @param {WebGLRenderingContext} gl
  */
-animus.Renderer.prototype.onCreate = function(gl) {
+discoball.Renderer.prototype.onCreate = function(gl) {
   this.keys_.install();
   var vertex = new webgl.Shader('v0',
       gl.VERTEX_SHADER,
@@ -110,76 +110,76 @@ animus.Renderer.prototype.onCreate = function(gl) {
 
   gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
-  this.root_ = animus.DualQuaternion.fromTranslation(
-      new animus.Vector(0, 0, -5));
+  this.root_ = discoball.DualQuaternion.fromTranslation(
+      new discoball.Vector(0, 0, -5));
 
-  this.local0_ = new animus.Pose([
+  this.local0_ = new discoball.Pose([
     // torso (0)
-    new animus.DualQuaternion(),
+    new discoball.DualQuaternion(),
     // skull (1)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 2.1, 0)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 2.1, 0)),
     // right arm (2)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(-0.6, 2, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.I, Math.PI/3).
-            times(animus.DualQuaternion.fromAxisAngle(
-                animus.Vector.K, 5*Math.PI/6))),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(-0.6, 2, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.I, Math.PI/3).
+            times(discoball.DualQuaternion.fromAxisAngle(
+                discoball.Vector.K, 5*Math.PI/6))),
     // right forearm (3)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 0.6, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.I, Math.PI/3)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 0.6, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.I, Math.PI/3)),
     // left arm (4)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0.6, 2, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.I, -Math.PI/3).
-            times(animus.DualQuaternion.fromAxisAngle(
-                animus.Vector.K, -5*Math.PI/6))),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0.6, 2, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.I, -Math.PI/3).
+            times(discoball.DualQuaternion.fromAxisAngle(
+                discoball.Vector.K, -5*Math.PI/6))),
     // left forearm (5)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 0.6, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.I, Math.PI/3)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 0.6, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.I, Math.PI/3)),
     // right thigh (6)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(-0.4, -0.1), 0).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.K, Math.PI).
-            times(animus.DualQuaternion.fromAxisAngle(
-                animus.Vector.I, Math.PI/4))),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(-0.4, -0.1), 0).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.K, Math.PI).
+            times(discoball.DualQuaternion.fromAxisAngle(
+                discoball.Vector.I, Math.PI/4))),
     // right calf (7)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 1.1, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.I, -Math.PI/4)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 1.1, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.I, -Math.PI/4)),
     // left thigh (8)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0.4, -0.1, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.K, -Math.PI).
-            times(animus.DualQuaternion.fromAxisAngle(
-                animus.Vector.I, 11*Math.PI/6))),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0.4, -0.1, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.K, -Math.PI).
+            times(discoball.DualQuaternion.fromAxisAngle(
+                discoball.Vector.I, 11*Math.PI/6))),
     // left calf (9)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 1.1, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.I, -Math.PI/2))
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 1.1, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.I, -Math.PI/2))
   ]);
 
-  this.local1_ = new animus.Pose([
+  this.local1_ = new discoball.Pose([
     // torso (0)
-    new animus.DualQuaternion(),
+    new discoball.DualQuaternion(),
     // skull (1)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 2.1, 0)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 2.1, 0)),
     // right arm (2)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(-0.6, 2, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.K, Math.PI/2)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(-0.6, 2, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.K, Math.PI/2)),
     // right forearm (3)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 0.6, 0)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 0.6, 0)),
     // left arm (4)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0.6, 2, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.K, -Math.PI/2)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0.6, 2, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.K, -Math.PI/2)),
     // left forearm (5)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 0.6, 0)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 0.6, 0)),
     // right thigh (6)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(-0.4, -0.1), 0).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.K, Math.PI)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(-0.4, -0.1), 0).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.K, Math.PI)),
     // right calf (7)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 1.1, 0)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 1.1, 0)),
     // left thigh (8)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0.4, -0.1, 0)).
-        times(animus.DualQuaternion.fromAxisAngle(animus.Vector.K, Math.PI)),
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0.4, -0.1, 0)).
+        times(discoball.DualQuaternion.fromAxisAngle(discoball.Vector.K, Math.PI)),
     // left calf (9)
-    animus.DualQuaternion.fromTranslation(new animus.Vector(0, 1.1, 0))
+    discoball.DualQuaternion.fromTranslation(new discoball.Vector(0, 1.1, 0))
   ]);
 
-  this.skeleton_ = new animus.Skeleton([
+  this.skeleton_ = new discoball.Skeleton([
     null, // torso (0) -> null
     0,    // skull (1) -> torso (0)
     0,    // right arm (2) -> torso (0)
@@ -195,7 +195,7 @@ animus.Renderer.prototype.onCreate = function(gl) {
   this.blendT_ = 0.;
 
   var bind = this.local0_.globalize(this.skeleton_);
-  var b = new animus.BoxMan().
+  var b = new discoball.BoxMan().
       add(0, bind.getBone(0), 1, 2, 0.2).      // skeleton
       add(1, bind.getBone(1), 0.5, 0.5, 0.5).  // skull
       add(2, bind.getBone(2), 0.2, 0.5, 0.2).  // right arm
@@ -212,7 +212,7 @@ animus.Renderer.prototype.onCreate = function(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
-  var grid = new animus.Grid(
+  var grid = new discoball.Grid(
       -2, 50, 50, 50, 50, [.21, .44, .33], [.42, .58, .44]);
   b = grid.buildTriangles();
   this.floorVertexCount_ = grid.getTriangleVertexCount();
@@ -233,10 +233,10 @@ animus.Renderer.prototype.onCreate = function(gl) {
 /**
  * @param {WebGLRenderingContext} gl
  */
-animus.Renderer.prototype.onDestroy = animus.nullFunction;
+discoball.Renderer.prototype.onDestroy = discoball.nullFunction;
 
 
-animus.Renderer.prototype.getFrustumMatrix = function(
+discoball.Renderer.prototype.getFrustumMatrix = function(
     left, right, bottom, top, near, far) {
   var a = (right + left) / (right - left);
   var b = (top + bottom) / (top - bottom);
@@ -251,7 +251,7 @@ animus.Renderer.prototype.getFrustumMatrix = function(
 };
 
 
-animus.Renderer.prototype.render = function(
+discoball.Renderer.prototype.render = function(
     gl, program, buffer, palette, n, type) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.uniform4fv(program.uJointPalette, palette);
@@ -283,7 +283,7 @@ animus.Renderer.prototype.render = function(
 };
 
 
-animus.Renderer.prototype.scenePass = function(gl) {
+discoball.Renderer.prototype.scenePass = function(gl) {
   gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
   gl.useProgram(this.p_.handle);
   gl.cullFace(gl.BACK);
@@ -302,19 +302,19 @@ animus.Renderer.prototype.scenePass = function(gl) {
 };
 
 
-animus.Renderer.DISPLACEMENT = 0.1;
+discoball.Renderer.DISPLACEMENT = 0.1;
 
 
-animus.Renderer.ROTATION = Math.PI/64;
+discoball.Renderer.ROTATION = Math.PI/64;
 
 
 /**
  * @param {WebGLRenderingContext} gl
  */
-animus.Renderer.prototype.onDraw = function(gl) {
+discoball.Renderer.prototype.onDraw = function(gl) {
   this.handleKeys();
 
-  animus.global.document.getElementById('t').innerText = this.blendT_;
+  discoball.global.document.getElementById('t').innerText = this.blendT_;
 
   if (this.index_ == 0) {
     // Canvas 0: Render the full shadow mapped scene.
@@ -324,71 +324,71 @@ animus.Renderer.prototype.onDraw = function(gl) {
 };
 
 
-animus.Renderer.DISPLACEMENT = 0.1;
+discoball.Renderer.DISPLACEMENT = 0.1;
 
 
-animus.Renderer.ROTATION = Math.PI/64;
+discoball.Renderer.ROTATION = Math.PI/64;
 
 
-animus.Renderer.prototype.handleKeys = function() {
-  if (this.keys_.isPressed(animus.Key.J)) {
+discoball.Renderer.prototype.handleKeys = function() {
+  if (this.keys_.isPressed(discoball.Key.J)) {
     this.blendT_ -= 0.05;
   }
-  if (this.keys_.isPressed(animus.Key.K)) {
+  if (this.keys_.isPressed(discoball.Key.K)) {
     this.blendT_ += 0.05;
   }
-  if (this.keys_.isPressed(animus.Key.W)) {
-    this.root_ = animus.DualQuaternion.fromTranslation(
-        animus.Vector.K.times(animus.Renderer.DISPLACEMENT)).
+  if (this.keys_.isPressed(discoball.Key.W)) {
+    this.root_ = discoball.DualQuaternion.fromTranslation(
+        discoball.Vector.K.times(discoball.Renderer.DISPLACEMENT)).
             times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.S)) {
-    this.root_ = animus.DualQuaternion.fromTranslation(
-        animus.Vector.K.times(-animus.Renderer.DISPLACEMENT)).
+  if (this.keys_.isPressed(discoball.Key.S)) {
+    this.root_ = discoball.DualQuaternion.fromTranslation(
+        discoball.Vector.K.times(-discoball.Renderer.DISPLACEMENT)).
             times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.A)) {
-    this.root_ = animus.DualQuaternion.fromTranslation(
-        animus.Vector.I.times(animus.Renderer.DISPLACEMENT)).
+  if (this.keys_.isPressed(discoball.Key.A)) {
+    this.root_ = discoball.DualQuaternion.fromTranslation(
+        discoball.Vector.I.times(discoball.Renderer.DISPLACEMENT)).
             times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.D)) {
-    this.root_ = animus.DualQuaternion.fromTranslation(
-        animus.Vector.I.times(-animus.Renderer.DISPLACEMENT)).
+  if (this.keys_.isPressed(discoball.Key.D)) {
+    this.root_ = discoball.DualQuaternion.fromTranslation(
+        discoball.Vector.I.times(-discoball.Renderer.DISPLACEMENT)).
             times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.Z)) {
-    this.root_ = animus.DualQuaternion.fromTranslation(
-        animus.Vector.J.times(animus.Renderer.DISPLACEMENT)).
+  if (this.keys_.isPressed(discoball.Key.Z)) {
+    this.root_ = discoball.DualQuaternion.fromTranslation(
+        discoball.Vector.J.times(discoball.Renderer.DISPLACEMENT)).
             times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.Q)) {
-    this.root_ = animus.DualQuaternion.fromTranslation(
-        animus.Vector.J.times(-animus.Renderer.DISPLACEMENT)).
+  if (this.keys_.isPressed(discoball.Key.Q)) {
+    this.root_ = discoball.DualQuaternion.fromTranslation(
+        discoball.Vector.J.times(-discoball.Renderer.DISPLACEMENT)).
             times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.RIGHT)) {
-    this.root_ = animus.DualQuaternion.fromAxisAngle(
-        animus.Vector.J, animus.Renderer.ROTATION).times(this.root_);
+  if (this.keys_.isPressed(discoball.Key.RIGHT)) {
+    this.root_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.J, discoball.Renderer.ROTATION).times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.LEFT)) {
-    this.root_ = animus.DualQuaternion.fromAxisAngle(
-        animus.Vector.J, -animus.Renderer.ROTATION).times(this.root_);
+  if (this.keys_.isPressed(discoball.Key.LEFT)) {
+    this.root_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.J, -discoball.Renderer.ROTATION).times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.DOWN)) {
-    this.root_ = animus.DualQuaternion.fromAxisAngle(
-        animus.Vector.I, animus.Renderer.ROTATION).times(this.root_);
+  if (this.keys_.isPressed(discoball.Key.DOWN)) {
+    this.root_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.I, discoball.Renderer.ROTATION).times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.UP)) {
-    this.root_ = animus.DualQuaternion.fromAxisAngle(
-        animus.Vector.I, -animus.Renderer.ROTATION).times(this.root_);
+  if (this.keys_.isPressed(discoball.Key.UP)) {
+    this.root_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.I, -discoball.Renderer.ROTATION).times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.GT)) {
-    this.root_ = animus.DualQuaternion.fromAxisAngle(
-        animus.Vector.K, animus.Renderer.ROTATION).times(this.root_);
+  if (this.keys_.isPressed(discoball.Key.GT)) {
+    this.root_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.K, discoball.Renderer.ROTATION).times(this.root_);
   }
-  if (this.keys_.isPressed(animus.Key.LT)) {
-    this.root_ = animus.DualQuaternion.fromAxisAngle(
-        animus.Vector.K, -animus.Renderer.ROTATION).times(this.root_);
+  if (this.keys_.isPressed(discoball.Key.LT)) {
+    this.root_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.K, -discoball.Renderer.ROTATION).times(this.root_);
   }
 };

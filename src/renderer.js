@@ -18,21 +18,21 @@ webgl.Renderer = function() {};
    * @param {number} width The new canvas width.
    * @param {number} height Thew new canvas height.
    */
- webgl.Renderer.prototype.onChange = animus.abstractMethod;
+ webgl.Renderer.prototype.onChange = discoball.abstractMethod;
 
 
   /**
    * Handles WebGL context creation.
    * @param {WebGLRenderingContext} gl The WebGL rendering context.
    */
- webgl.Renderer.prototype.onCreate = animus.abstractMethod;
+ webgl.Renderer.prototype.onCreate = discoball.abstractMethod;
 
 
   /**
    * Handles WebGL context destruction.
    * @param {WebGLRenderingContext} gl The WebGL rendering context.
    */
- webgl.Renderer.prototype.onDestroy = animus.abstractMethod;
+ webgl.Renderer.prototype.onDestroy = discoball.abstractMethod;
 
 
 
@@ -40,4 +40,4 @@ webgl.Renderer = function() {};
    * Handles WebGL drawing.
    * @param {WebGLRenderingContext} gl The WebGL rendering context.
    */
- webgl.Renderer.prototype.onDraw = animus.abstractMethod;
+ webgl.Renderer.prototype.onDraw = discoball.abstractMethod;

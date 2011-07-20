@@ -1,11 +1,11 @@
 // Copyright 2011 Robert Scott Dionne. All rights reserved.
 
 /**
- * @param {Array.<!animus.DualQuaternion>} opt_bones
+ * @param {Array.<!discoball.DualQuaternion>} opt_bones
  */
-animus.Pose = function(opt_bones) {
+discoball.Pose = function(opt_bones) {
   /**
-   * @type {Array.<!animus.DualQuaternion>}
+   * @type {Array.<!discoball.DualQuaternion>}
    * @private
    */
   this.bones_ = opt_bones || [];
@@ -14,12 +14,12 @@ animus.Pose = function(opt_bones) {
 
 /**
  * Blend this pose with that pose according to t.
- * @param {!animus.Pose} that
+ * @param {!discoball.Pose} that
  * @param {number} t
- * return {!animus.Pose}
+ * return {!discoball.Pose}
  */
-animus.Pose.prototype.blend = function(that, t) {
-  var result = new animus.Pose();
+discoball.Pose.prototype.blend = function(that, t) {
+  var result = new discoball.Pose();
   for (var i = 0; i < this.bones_.length; ++i) {
     result.set(i, this.bones_[i].lerp(that.bones_[i], t));
   }
@@ -29,11 +29,11 @@ animus.Pose.prototype.blend = function(that, t) {
 
 /**
  * Globalize this pose.
- * @param {!animus.Skeleton} skeleton
- * @return {!animus.Pose}
+ * @param {!discoball.Skeleton} skeleton
+ * @return {!discoball.Pose}
  */
-animus.Pose.prototype.globalize = function(skeleton) {
-  var result = new animus.Pose();
+discoball.Pose.prototype.globalize = function(skeleton) {
+  var result = new discoball.Pose();
   for (var thisBone = 0; thisBone < skeleton.joints.length; ++thisBone) {
     var thatBone = thisBone;
     result.set(thisBone, this.bones_[thatBone]);
@@ -47,10 +47,10 @@ animus.Pose.prototype.globalize = function(skeleton) {
 
 
 /**
- * @return {animus.Pose}
+ * @return {discoball.Pose}
  */
-animus.Pose.prototype.inverse = function() {
-  var result = new animus.Pose();
+discoball.Pose.prototype.inverse = function() {
+  var result = new discoball.Pose();
   for (var i = 0; i < this.bones_.length; ++i) {
     result.set(i, this.bones_[i].reciprocal());
   }
@@ -59,11 +59,11 @@ animus.Pose.prototype.inverse = function() {
 
 
 /**
- * @param {animus.Pose} that
- * @return {animus.Pose}
+ * @param {discoball.Pose} that
+ * @return {discoball.Pose}
  */
-animus.Pose.prototype.times = function(that) {
-  var result = new animus.Pose();
+discoball.Pose.prototype.times = function(that) {
+  var result = new discoball.Pose();
   for (var i = 0; i < this.bones_.length; ++i) {
     result.set(i, this.bones_[i].times(that.bones_[i]));
   }
@@ -73,30 +73,30 @@ animus.Pose.prototype.times = function(that) {
 
 /**
  * @param {number} i
- * @param {animus.DualQuaternion} bone
+ * @param {discoball.DualQuaternion} bone
  */
-animus.Pose.prototype.set = function(i, bone) {
+discoball.Pose.prototype.set = function(i, bone) {
   this.bones_[i] = bone;
 };
 
 
-animus.Pose.prototype.reset = function() {
+discoball.Pose.prototype.reset = function() {
   this.bones_ = [];
 };
 
 
 /**
- * @return {animus.DualQuaternion}
+ * @return {discoball.DualQuaternion}
  */
-animus.Pose.prototype.getBone = function(i) {
+discoball.Pose.prototype.getBone = function(i) {
   return this.bones_[i];
 };
 
 
 /**
- * @return {!animus.Palette}
+ * @return {!discoball.Palette}
  */
-animus.Pose.prototype.get = function() {
+discoball.Pose.prototype.get = function() {
   var result = [];
   for (var i = 0; i < this.bones_.length; ++i) {
     var bone = this.bones_[i];

@@ -3,4 +3,4 @@
 /**
  * @typedef {Array.<number>}
  */
-animus.Palette;
+discoball.Palette;

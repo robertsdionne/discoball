@@ -5,26 +5,26 @@
  * @author robertsdionne@gmail.com (Robert Scott Dionne)
  */
 
-var animus = {};
+var discoball = {};
 var webgl = {};
 
 
-animus.global = this;
+discoball.global = this;
 
 
-animus.global.requestAnimationFrame = (function() {
-  return animus.global.requestAnimationFrame ||
-      animus.global.webkitRequestAnimationFrame ||
-      animus.global.mozRequestAnimationFrame ||
-      animus.global.oRequestAnimationFrame ||
-      animus.global.msRequestAnimationFrame ||
+discoball.global.requestAnimationFrame = (function() {
+  return discoball.global.requestAnimationFrame ||
+      discoball.global.webkitRequestAnimationFrame ||
+      discoball.global.mozRequestAnimationFrame ||
+      discoball.global.oRequestAnimationFrame ||
+      discoball.global.msRequestAnimationFrame ||
       function(callback, element) {
-        animus.global.setTimeout(callback, 1000/60);
+        discoball.global.setTimeout(callback, 1000/60);
       };
 })();
 
 
-animus.inherits = function(child, parent) {
+discoball.inherits = function(child, parent) {
   var temp = function() {};
   temp.prototype = parent.prototype;
   child.superClass_ = parent.prototype;
@@ -33,8 +33,8 @@ animus.inherits = function(child, parent) {
 };
 
 
-animus.bind = function(fn, self) {
-  var context = self || animus.global;
+discoball.bind = function(fn, self) {
+  var context = self || discoball.global;
   if (arguments > 2) {
     var bound = Array.prototype.slice.call(arguments, 2);
     return function() {
@@ -50,9 +50,9 @@ animus.bind = function(fn, self) {
 };
 
 
-animus.nullFunction = function() {};
+discoball.nullFunction = function() {};
 
 
-animus.abstractMethod = function() {
+discoball.abstractMethod = function() {
   throw new Error('Unimplemented abstract method.');
 };

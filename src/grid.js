@@ -1,6 +1,6 @@
 // Copyright 2011 Robert Scott Dionne. All rights reserved.
 
-animus.Grid = function(y, width, depth, nx, nz, triangleColor, wireframeColor) {
+discoball.Grid = function(y, width, depth, nx, nz, triangleColor, wireframeColor) {
   this.y = y;
   this.width = width;
   this.depth = depth;
@@ -11,12 +11,12 @@ animus.Grid = function(y, width, depth, nx, nz, triangleColor, wireframeColor) {
 };
 
 
-animus.Grid.prototype.getTriangleVertexCount = function() {
+discoball.Grid.prototype.getTriangleVertexCount = function() {
   return this.nx * this.nz * 6;
 };
 
 
-animus.Grid.prototype.buildTriangles = function() {
+discoball.Grid.prototype.buildTriangles = function() {
   var normal = [0, 1, 0];
   var data = [];
   var dx = this.width / this.nx;
@@ -61,12 +61,12 @@ animus.Grid.prototype.buildTriangles = function() {
 };
 
 
-animus.Grid.prototype.getWireframeVertexCount = function() {
+discoball.Grid.prototype.getWireframeVertexCount = function() {
   return this.nx * this.nz * 4;
 };
 
 
-animus.Grid.prototype.buildWireframe = function() {
+discoball.Grid.prototype.buildWireframe = function() {
   var normal = [0, 1, 0];
   var data = [];
   var dx = this.width / this.nx;

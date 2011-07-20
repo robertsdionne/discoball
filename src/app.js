@@ -51,7 +51,7 @@ webgl.App.prototype.checkDimensions_ = function() {
  */
 webgl.App.prototype.install = function(renderers, opt_stats) {
   for (var id in renderers) {
-    this.canvases_[id] = animus.global.document.getElementById(id);
+    this.canvases_[id] = discoball.global.document.getElementById(id);
     this.canvases_[id].width = window.innerWidth;
     this.canvases_[id].height = window.innerHeight;
     this.gls_[id] = this.canvases_[id].getContext(webgl.App.WEBGL_CONTEXT);
@@ -60,7 +60,7 @@ webgl.App.prototype.install = function(renderers, opt_stats) {
   }
   if (opt_stats) {
     this.smoothDt_ = 0;
-    this.stats_ = animus.global.document.getElementById(opt_stats);
+    this.stats_ = discoball.global.document.getElementById(opt_stats);
     this.lastTick_ = new Date().getTime();
   }
   this.onFrame_();
@@ -97,8 +97,8 @@ webgl.App.prototype.onFrame_ = function() {
     this.renderers_[id].onDraw(this.gls_[id]);
   }
   this.keys_.update();
-  animus.global.setTimeout(
-      animus.bind(this.onFrame_, this), 1000/60);
+  discoball.global.setTimeout(
+      discoball.bind(this.onFrame_, this), 1000/60);
 };
 
 

@@ -8,30 +8,30 @@
 /**
  * @constructor
  */
-animus.BoxMan = function() {
+discoball.BoxMan = function() {
   this.data_ = [];
 };
 
 
-animus.BoxMan.prototype.add = function(i, transform, width, height, length) {
-  transform = transform || new animus.DualQuaternion();
+discoball.BoxMan.prototype.add = function(i, transform, width, height, length) {
+  transform = transform || new discoball.DualQuaternion();
   var halfWidth = width / 2;
   var halfLength = length / 2;
   this.addCube_(i, transform,
-      new animus.Vector(halfWidth, height, halfLength),
-      new animus.Vector(halfWidth, height, -halfLength),
-      new animus.Vector(-halfWidth, height, -halfLength),
-      new animus.Vector(-halfWidth, height, halfLength),
-      new animus.Vector(halfWidth, 0, halfLength),
-      new animus.Vector(halfWidth, 0, -halfLength),
-      new animus.Vector(-halfWidth, 0, -halfLength),
-      new animus.Vector(-halfWidth, 0, halfLength)
+      new discoball.Vector(halfWidth, height, halfLength),
+      new discoball.Vector(halfWidth, height, -halfLength),
+      new discoball.Vector(-halfWidth, height, -halfLength),
+      new discoball.Vector(-halfWidth, height, halfLength),
+      new discoball.Vector(halfWidth, 0, halfLength),
+      new discoball.Vector(halfWidth, 0, -halfLength),
+      new discoball.Vector(-halfWidth, 0, -halfLength),
+      new discoball.Vector(-halfWidth, 0, halfLength)
   );
   return this;
 };
 
 
-animus.BoxMan.prototype.addCube_ =
+discoball.BoxMan.prototype.addCube_ =
     function(i, transform, a, b, c, d, e, f, g, h) {
   this.addFace_(i, transform, a, b, c, d);
   this.addFace_(i, transform, e, h, g, f);
@@ -42,13 +42,13 @@ animus.BoxMan.prototype.addCube_ =
 };
 
 
-animus.BoxMan.prototype.addFace_ = function(i, transform, a, b, c, d) {
+discoball.BoxMan.prototype.addFace_ = function(i, transform, a, b, c, d) {
   this.addTriangle_(i, transform, a, b, c);
   this.addTriangle_(i, transform, c, d, a);
 };
 
 
-animus.BoxMan.prototype.addTriangle_ = function(i, transform, a, b, c) {
+discoball.BoxMan.prototype.addTriangle_ = function(i, transform, a, b, c) {
   a = transform.transform(a);
   b = transform.transform(b);
   c = transform.transform(c);
@@ -68,6 +68,6 @@ animus.BoxMan.prototype.addTriangle_ = function(i, transform, a, b, c) {
 };
 
 
-animus.BoxMan.prototype.build = function() {
+discoball.BoxMan.prototype.build = function() {
   return new Float32Array(this.data_);
 };

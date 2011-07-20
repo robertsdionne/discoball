@@ -3,4 +3,4 @@
 /**
  * @typedef {(number)}
  */
-animus.Bone;
+discoball.Bone;

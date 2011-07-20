@@ -7,16 +7,16 @@
 
 /**
  * Constructs a new quaternion given the vector and scalar.
- * @param {animus.Vector} vector
+ * @param {discoball.Vector} vector
  * @param {number} scalar
  * @constructor
  */
-animus.Quaternion = function(vector, scalar) {
+discoball.Quaternion = function(vector, scalar) {
   /**
-   * @type {animus.Vector}
+   * @type {discoball.Vector}
    * @private
    */
-  this.vector = vector || new animus.Vector();
+  this.vector = vector || new discoball.Vector();
   
   /**
    * @type {number}
@@ -26,25 +26,25 @@ animus.Quaternion = function(vector, scalar) {
 };
 
 
-animus.Quaternion.fromAxisAngle = function(axis, angle) {
-  return new animus.Quaternion(
+discoball.Quaternion.fromAxisAngle = function(axis, angle) {
+  return new discoball.Quaternion(
       axis.normalized().times(Math.sin(angle/2)),
       Math.cos(angle/2));
 };
 
 
 /**
- * @return {animus.Quaternion} The negation of this quaternion.
+ * @return {discoball.Quaternion} The negation of this quaternion.
  */
-animus.Quaternion.prototype.negate = function() {
-  return new animus.Quaternion(this.vector.negate(), -this.scalar);
+discoball.Quaternion.prototype.negate = function() {
+  return new discoball.Quaternion(this.vector.negate(), -this.scalar);
 };
 
 
 /**
  * @return {number} The magnitude of this quaternion.
  */
-animus.Quaternion.prototype.magnitude = function() {
+discoball.Quaternion.prototype.magnitude = function() {
   return Math.sqrt(this.magnitudeSquared());
 };
 
@@ -52,44 +52,44 @@ animus.Quaternion.prototype.magnitude = function() {
 /**
  * @return {number} The square magnitude of this quaternion.
  */
-animus.Quaternion.prototype.magnitudeSquared = function() {
+discoball.Quaternion.prototype.magnitudeSquared = function() {
   return this.scalar * this.scalar + this.vector.magnitudeSquared();
 };
 
 
 /**
- * @return {animus.Quaternion} This quaternion normalized.
+ * @return {discoball.Quaternion} This quaternion normalized.
  */
-animus.Quaternion.prototype.normalized = function() {
+discoball.Quaternion.prototype.normalized = function() {
   return this.over(this.magnitude());
 };
 
 
 /**
- * @return {animus.Quaternion} This quaternion's conjugate.
+ * @return {discoball.Quaternion} This quaternion's conjugate.
  */
-animus.Quaternion.prototype.conjugate = function() {
-  return new animus.Quaternion(this.vector.negate(), this.scalar);
+discoball.Quaternion.prototype.conjugate = function() {
+  return new discoball.Quaternion(this.vector.negate(), this.scalar);
 };
 
 
 /**
- * @return {animus.Quaternion} This quaternion's reciprocal.
+ * @return {discoball.Quaternion} This quaternion's reciprocal.
  */
-animus.Quaternion.prototype.reciprocal = function() {
+discoball.Quaternion.prototype.reciprocal = function() {
   return this.conjugate().over(this.magnitudeSquared());
 };
 
 
 /**
- * @return {animus.Quaternion} The sum of this and that.
- * @param {number|animus.Quaternion} that
+ * @return {discoball.Quaternion} The sum of this and that.
+ * @param {number|discoball.Quaternion} that
  */
-animus.Quaternion.prototype.plus = function(that) {
+discoball.Quaternion.prototype.plus = function(that) {
   if (typeof that === 'number') {
-    return new animus.Quaternion(this.vector, this.scalar + that);
-  } else if (that instanceof animus.Quaternion) {
-    return new animus.Quaternion(
+    return new discoball.Quaternion(this.vector, this.scalar + that);
+  } else if (that instanceof discoball.Quaternion) {
+    return new discoball.Quaternion(
         this.vector.plus(that.vector),
         this.scalar + that.scalar);
   }
@@ -97,14 +97,14 @@ animus.Quaternion.prototype.plus = function(that) {
 
 
 /**
- * @return {animus.Quaternion} The difference of this and that.
- * @param {number|animus.Quaternion} that
+ * @return {discoball.Quaternion} The difference of this and that.
+ * @param {number|discoball.Quaternion} that
  */
-animus.Quaternion.prototype.minus = function(that) {
+discoball.Quaternion.prototype.minus = function(that) {
   if (typeof that === 'number') {
-    return new animus.Quaternion(this.vector, this.scalar - that);
-  } else if (that instanceof animus.Quaternion) {
-    return new animus.Quaternion(
+    return new discoball.Quaternion(this.vector, this.scalar - that);
+  } else if (that instanceof discoball.Quaternion) {
+    return new discoball.Quaternion(
         this.vector.minus(that.vector),
         this.scalar - that.scalar);
   }
@@ -112,16 +112,16 @@ animus.Quaternion.prototype.minus = function(that) {
 
 
 /**
- * @return {animus.Quaternion} The product of this and that.
- * @param {number|animus.Quaternion} that
+ * @return {discoball.Quaternion} The product of this and that.
+ * @param {number|discoball.Quaternion} that
  */
-animus.Quaternion.prototype.times = function(that) {
+discoball.Quaternion.prototype.times = function(that) {
   if (typeof that === 'number') {
-    return new animus.Quaternion(
+    return new discoball.Quaternion(
         this.vector.times(that),
         this.scalar * that);
-  } else if (that instanceof animus.Quaternion) {
-    return new animus.Quaternion(
+  } else if (that instanceof discoball.Quaternion) {
+    return new discoball.Quaternion(
         that.vector.times(this.scalar).
             plus(this.vector.times(that.scalar)).
             plus(this.vector.cross(that.vector)),
@@ -131,24 +131,24 @@ animus.Quaternion.prototype.times = function(that) {
 
 
 /**
- * @return {animus.Quaternion} The quotient of this and that.
- * @param {number|animus.Quaternion} that
+ * @return {discoball.Quaternion} The quotient of this and that.
+ * @param {number|discoball.Quaternion} that
  */
-animus.Quaternion.prototype.over = function(that) {
+discoball.Quaternion.prototype.over = function(that) {
   if (typeof that === 'number') {
-    return new animus.Quaternion(
+    return new discoball.Quaternion(
         this.vector.over(that),
         this.scalar / that);
-  } else if (that instanceof animus.Quaternion) {
+  } else if (that instanceof discoball.Quaternion) {
     return this.times(that.reciprocal());
   }
 };
 
 /**
- * @return {animus.Vector} That vector rotated by this quaternion.
- * @param {animus.Vector} that
+ * @return {discoball.Vector} That vector rotated by this quaternion.
+ * @param {discoball.Vector} that
  */
-animus.Quaternion.prototype.transform = function(that) {
+discoball.Quaternion.prototype.transform = function(that) {
   return this.times(that).times(this.reciprocal()).vector;
 };
 
@@ -156,6 +156,6 @@ animus.Quaternion.prototype.transform = function(that) {
 /**
  * @return {string} A string representation of this quaternion.
  */
-animus.Quaternion.prototype.toString = function() {
+discoball.Quaternion.prototype.toString = function() {
   return this.vector + ' + ' + this.scalar;
 };
