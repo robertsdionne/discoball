@@ -94,6 +94,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   this.body_ = gl.createBuffer();
   this.floor_ = gl.createBuffer();
   this.floorFrame_ = gl.createBuffer();
+  this.ball_ = gl.createBuffer();
 
   this.texture_ = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, this.texture_);
@@ -108,7 +109,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.bindRenderbuffer(gl.RENDERBUFFER, this.rb_);
   gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, 640, 640);
 
-  gl.clearColor(1.0, 1.0, 1.0, 1.0);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   this.root_ = discoball.DualQuaternion.fromTranslation(
       new discoball.Vector(0, 0, -5));
@@ -212,6 +213,14 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
+  var ball = new discoball.Ball(1, 0.1, 800, [1, 1, 1]);
+  b = ball.buildTriangles();
+  this.ballVertexCount_ = ball.getTriangleVertexCount();
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.ball_);
+  gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
+
   var grid = new discoball.Grid(
       -2, 50, 50, 50, 50, [.21, .44, .33], [.42, .58, .44]);
   b = grid.buildTriangles();
@@ -292,13 +301,15 @@ discoball.Renderer.prototype.scenePass = function(gl) {
   gl.uniform1i(this.p_.uLighting, true);
   var palette = this.animator_.animate(this.skeleton_, this.root_,
       this.local0_, this.local1_, this.blendT_);
-  this.render(gl, this.p_, this.body_, palette, 360, gl.TRIANGLES);
+  //this.render(gl, this.p_, this.body_, palette, 360, gl.TRIANGLES);
+//this.render(
+//    gl, this.p_, this.floor_, palette, this.floorVertexCount_, gl.TRIANGLES);
   this.render(
-      gl, this.p_, this.floor_, palette, this.floorVertexCount_, gl.TRIANGLES);
+      gl, this.p_, this.ball_, palette, this.ballVertexCount_, gl.TRIANGLES);
   gl.depthFunc(gl.LEQUAL);
   gl.uniform1i(this.p_.uLighting, true);
-  this.render(gl, this.p_, this.floorFrame_, palette,
-      this.floorFrameVertexCount_, gl.LINES);
+//this.render(gl, this.p_, this.floorFrame_, palette,
+//    this.floorFrameVertexCount_, gl.LINES);
 };
 
 
