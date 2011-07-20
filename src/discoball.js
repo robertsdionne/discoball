@@ -112,7 +112,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   this.root_ = discoball.DualQuaternion.fromTranslation(
-      new discoball.Vector(0, 0, -5));
+      new discoball.Vector(0, 0, -15));
 
   this.local0_ = new discoball.Pose([
     // torso (0)
@@ -213,7 +213,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
-  var ball = new discoball.Ball(1, 0.1, 800, [1, 1, 1]);
+  var ball = new discoball.Ball(10, 1, [1, 1, 1]);
   b = ball.buildTriangles();
   this.ballVertexCount_ = ball.getTriangleVertexCount();
 
