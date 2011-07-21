@@ -34,7 +34,8 @@ discoball.Ball.prototype.buildTriangles = function() {
       var v1 = this.point(theta0, phi1);
       var v2 = this.point(theta1, phi1);
       var v3 = this.point(theta1, phi0);
-      var normal = v0.plus(v1).plus(v2).plus(v3).over(4).normalized();
+      var index = Math.floor(Math.random() * 4);
+      var normal = [v0, v1, v2, v3][index].normalized();
       data.push(v0.x, v0.y, v0.z);
       data.push(normal.x, normal.y, normal.z);
       data.push(this.color[0], this.color[1], this.color[2]);

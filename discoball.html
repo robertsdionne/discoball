@@ -101,8 +101,9 @@
                 normalize(reflect(light, vNormal))), 0., 1.), 99.0);
         highp float dot = dot(normalize(light), vNormal);
         highp float diffuse = max(dot, AMBIENT);
-        highp vec4 color = textureCube(uTexture, normalize(vTexCoord));
-        gl_FragColor = vec4(diffuse * color.xyz + vec3(spec), 1.);
+        highp vec3 color = (textureCube(uTexture, normalize(vTexCoord)).xyz
+            + vColor) / 2.;
+        gl_FragColor = vec4(diffuse * color + vec3(spec), 1.);
       }
     </script>
     <style type="text/css">

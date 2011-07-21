@@ -34,6 +34,11 @@ discoball.Renderer = function(keys) {
    * @type {WebGLBuffer}
    */
   this.ball_ = null;
+
+  /**
+   * @type {boolean}
+   */
+  this.rotate_ = true;
 };
 discoball.inherits(discoball.Renderer, webgl.Renderer);
 
@@ -203,8 +208,10 @@ discoball.Renderer.ROTATION = Math.PI/64;
  * @param {WebGLRenderingContext} gl
  */
 discoball.Renderer.prototype.onDraw = function(gl) {
-  this.root_ = this.root_.times(discoball.DualQuaternion.fromAxisAngle(
-      discoball.Vector.J, discoball.Renderer.ROTATION/16));
+  if (this.rotate_) {
+    this.root_ = this.root_.times(discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.J, discoball.Renderer.ROTATION/16));
+  }
   this.handleKeys();
   this.scenePass(gl);
   gl.flush();
@@ -212,6 +219,9 @@ discoball.Renderer.prototype.onDraw = function(gl) {
 
 
 discoball.Renderer.prototype.handleKeys = function() {
+  if (this.keys_.justPressed(discoball.Key.J)) {
+    this.rotate_ = !this.rotate_;
+  }
   if (this.keys_.isPressed(discoball.Key.W)) {
     this.root_ = discoball.DualQuaternion.fromTranslation(
         discoball.Vector.K.times(discoball.Renderer.DISPLACEMENT)).
