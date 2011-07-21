@@ -51,7 +51,8 @@ discoball.inherits(discoball.Renderer, webgl.Renderer);
 discoball.Renderer.prototype.onChange = function(gl, width, height) {
   gl.viewport(0, 0, width, height);
   var aspect = width/height;
-  this.projection_ = this.getFrustumMatrix(-aspect, aspect, -1, 1, 1, 1000);
+  this.projection_ = this.getFrustumMatrix(
+      -aspect/10, aspect/10, -0.1, 0.1, 0.1, 30);
 };
 
 
