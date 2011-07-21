@@ -1,16 +1,14 @@
 // Copyright 2011 Robert Scott Dionne. All rights reserved.
 
-discoball.Ball = function(radius, tileSize, color) {
+discoball.Ball = function(radius, n, color) {
   this.radius = radius;
-  this.tileSize = tileSize;
+  this.n = n;
   this.color = color;
 };
 
 
 discoball.Ball.prototype.getTriangleVertexCount = function() {
-  var circumference = 2 * Math.PI * this.radius;
-  var n = Math.floor(circumference/this.tileSize);
-  return n * n * 3;
+  return this.n * this.n * 3;
 };
 
 
@@ -25,14 +23,13 @@ discoball.Ball.prototype.point = function(theta, phi) {
 
 discoball.Ball.prototype.buildTriangles = function() {
   var circumference = 2 * Math.PI * this.radius;
-  var n = Math.floor(circumference/this.tileSize);
   var data = [];
-  for (var i = 0; i < n/2; ++i) {
-    for (var j = 0; j < n; ++j) {
-      var theta0 = i * 2 * Math.PI / n;
-      var theta1 = (i + 1) * 2 * Math.PI / n;
-      var phi0 = j * 2 * Math.PI / n;
-      var phi1 = (j + 1) * 2 * Math.PI / n;
+  for (var i = 0; i < this.n/2; ++i) {
+    for (var j = 0; j < this.n; ++j) {
+      var theta0 = i * 2 * Math.PI / this.n + 0.0025 * Math.random();
+      var theta1 = (i + 1) * 2 * Math.PI / this.n - 0.0025 * Math.random();
+      var phi0 = j * 2 * Math.PI / this.n + 0.0025 * Math.random();
+      var phi1 = (j + 1) * 2 * Math.PI / this.n - 0.0025 * Math.random();
       var v0 = this.point(theta0, phi0);
       var v1 = this.point(theta0, phi1);
       var v2 = this.point(theta1, phi1);

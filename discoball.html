@@ -49,6 +49,7 @@
       // Per vertex varyings
       varying vec3 vPosition;
       varying vec3 vNormal;
+      varying vec3 vTexCoord;
       varying vec3 vColor;
 
       void getJoint(float i, out vec4 joint[2]) {
@@ -75,17 +76,19 @@
         pos += transl;
 
         vNormal = rotate(transf[0], aNormal);
+        vTexCoord = reflect(pos, vNormal);
         vColor = aColor;
         gl_Position = uProjection * vec4(pos, 1.0);
         vPosition = pos;
       }
     </script>
     <script id="f0" type="x-shader/x-fragment">
-      uniform lowp bool uLighting;
+      uniform samplerCube uTexture;
 
       // Per fragment varyings
       varying highp vec3 vPosition;
       varying highp vec3 vNormal;
+      varying highp vec3 vTexCoord;
       varying lowp vec3 vColor;
 
       const highp vec3 LIGHT_POSITION = vec3(0., 0., 0.);
@@ -95,10 +98,11 @@
         highp vec3 light = LIGHT_POSITION - vPosition;
         highp float spec =
             pow(clamp(dot(vec3(0,0,-1),
-                normalize(reflect(light, vNormal))), 0., 1.), 20.0);
+                normalize(reflect(light, vNormal))), 0., 1.), 99.0);
         highp float dot = dot(normalize(light), vNormal);
-        highp float diffuse = uLighting ? max(dot, AMBIENT) : 1.;
-        gl_FragColor = vec4(diffuse * vColor + vec3(spec), 1.);
+        highp float diffuse = max(dot, AMBIENT);
+        highp vec4 color = textureCube(uTexture, normalize(vTexCoord));
+        gl_FragColor = vec4(diffuse * color.xyz + vec3(spec), 1.);
       }
     </script>
     <style type="text/css">
