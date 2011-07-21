@@ -34,11 +34,11 @@ discoball.Ball.prototype.buildTriangles = function() {
       var v1 = this.point(theta0, phi1);
       var v2 = this.point(theta1, phi1);
       var v3 = this.point(theta1, phi0);
-      var v01 = v0.plus(v1).over(2);
-      var v12 = v1.plus(v2).over(2);
-      var v23 = v2.plus(v3).over(2);
-      var v30 = v3.plus(v0).over(2);
-      var v0123 = v0.plus(v1).plus(v2).plus(v3).over(4);
+      var v01 = v0.plus(v1);
+      var v12 = v1.plus(v2);
+      var v23 = v2.plus(v3);
+      var v30 = v3.plus(v0);
+      var v0123 = v0.plus(v1).plus(v2).plus(v3);
       var index = Math.floor(Math.random() * 9);
       var normal = [v0, v1, v2, v3, v01, v12, v23, v30, v0123][index].
           normalized();
