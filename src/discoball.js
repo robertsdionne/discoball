@@ -187,6 +187,9 @@ discoball.Renderer.prototype.render = function(
 };
 
 
+discoball.Renderer.LIGHT_POS = new discoball.Vector(-15, 15, 15);
+
+
 discoball.Renderer.prototype.scenePass = function(gl) {
   gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
   gl.useProgram(this.p_.handle);
@@ -197,6 +200,8 @@ discoball.Renderer.prototype.scenePass = function(gl) {
   gl.uniform4fv(this.p_.uCamera, palette);
   palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
   gl.uniform4fv(this.p_.uTransform, palette);
+  var lightPos = this.camera_.transform(discoball.Renderer.LIGHT_POS);
+  gl.uniform3f(this.p_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p_, this.ball_, this.ballVertexCount_, gl.TRIANGLES);
 };

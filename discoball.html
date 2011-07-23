@@ -84,6 +84,7 @@
       }
     </script>
     <script id="f0" type="x-shader/x-fragment">
+      uniform highp vec3 uLightPos;
       uniform samplerCube uTexture;
 
       // Per fragment varyings
@@ -92,16 +93,15 @@
       varying highp vec3 vTexCoord;
       varying lowp vec3 vColor;
 
-      const highp vec3 LIGHT_POSITION = vec3(0., 0., 0.);
       const highp float AMBIENT = 0.25;
 
       void main() {
-        highp vec3 light = LIGHT_POSITION - vPosition;
+        highp vec3 light = uLightPos - vPosition;
         highp float spec =
-            pow(clamp(dot(vec3(0,0,-1),
-                normalize(reflect(light, vNormal))), 0., 1.), 99.0);
+            pow(clamp(-dot(normalize(vPosition),
+                normalize(reflect(-light, vNormal))), 0., 1.), 99.0);
         highp float dot = dot(normalize(light), vNormal);
-        highp float diffuse = max(dot, AMBIENT);
+        highp vec3 diffuse = vec3(max(dot, AMBIENT));
         highp vec3 color = textureCube(uTexture, normalize(vTexCoord)).xyz
             * vColor;
         gl_FragColor = vec4(diffuse * color + vec3(spec), 1.);
