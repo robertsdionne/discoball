@@ -82,8 +82,9 @@ discoball.Renderer.prototype.onCreate = function(gl) {
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-  this.root_ = discoball.DualQuaternion.fromTranslation(
+  this.camera_ = discoball.DualQuaternion.fromTranslation(
       new discoball.Vector(0, 0, -15));
+  this.spinning_ = new discoball.DualQuaternion();
 
   var ball = new discoball.Ball(10, 128, [4, 4, 4]);
   b = ball.buildTriangles();
@@ -156,9 +157,8 @@ discoball.Renderer.prototype.getFrustumMatrix = function(
 
 
 discoball.Renderer.prototype.render = function(
-    gl, program, buffer, palette, n, type) {
+    gl, program, buffer, n, type) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.uniform4fv(program.uJointPalette, palette);
   gl.vertexAttribPointer(program.aPosition, 3, gl.FLOAT, false, 40, 0);
   gl.enableVertexAttribArray(program.aPosition);
   if (program.aNormal >= 0) {
@@ -193,9 +193,12 @@ discoball.Renderer.prototype.scenePass = function(gl) {
   gl.cullFace(gl.BACK);
   gl.uniformMatrix4fv(this.p_.uProjection, false, this.projection_);
   gl.uniform1i(this.p_.uTexture, this.texture_);
-  var palette = new discoball.Pose([this.root_]).get();
+  var palette = new discoball.Pose([this.camera_]).get();
+  gl.uniform4fv(this.p_.uCamera, palette);
+  palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
+  gl.uniform4fv(this.p_.uTransform, palette);
   this.render(
-      gl, this.p_, this.ball_, palette, this.ballVertexCount_, gl.TRIANGLES);
+      gl, this.p_, this.ball_, this.ballVertexCount_, gl.TRIANGLES);
 };
 
 
@@ -210,8 +213,9 @@ discoball.Renderer.ROTATION = Math.PI/64;
  */
 discoball.Renderer.prototype.onDraw = function(gl) {
   if (this.rotate_) {
-    this.root_ = this.root_.times(discoball.DualQuaternion.fromAxisAngle(
-        discoball.Vector.J, discoball.Renderer.ROTATION/16));
+    this.spinning_ = this.spinning_.times(
+        discoball.DualQuaternion.fromAxisAngle(
+            discoball.Vector.J, discoball.Renderer.ROTATION/16));
   }
   this.handleKeys();
   this.scenePass(gl);
@@ -224,57 +228,57 @@ discoball.Renderer.prototype.handleKeys = function() {
     this.rotate_ = !this.rotate_;
   }
   if (this.keys_.isPressed(discoball.Key.W)) {
-    this.root_ = discoball.DualQuaternion.fromTranslation(
+    this.camera_ = discoball.DualQuaternion.fromTranslation(
         discoball.Vector.K.times(discoball.Renderer.DISPLACEMENT)).
-            times(this.root_);
+            times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.S)) {
-    this.root_ = discoball.DualQuaternion.fromTranslation(
+    this.camera_ = discoball.DualQuaternion.fromTranslation(
         discoball.Vector.K.times(-discoball.Renderer.DISPLACEMENT)).
-            times(this.root_);
+            times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.A)) {
-    this.root_ = discoball.DualQuaternion.fromTranslation(
+    this.camera_ = discoball.DualQuaternion.fromTranslation(
         discoball.Vector.I.times(discoball.Renderer.DISPLACEMENT)).
-            times(this.root_);
+            times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.D)) {
-    this.root_ = discoball.DualQuaternion.fromTranslation(
+    this.camera_ = discoball.DualQuaternion.fromTranslation(
         discoball.Vector.I.times(-discoball.Renderer.DISPLACEMENT)).
-            times(this.root_);
+            times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.Z)) {
-    this.root_ = discoball.DualQuaternion.fromTranslation(
+    this.camera_ = discoball.DualQuaternion.fromTranslation(
         discoball.Vector.J.times(discoball.Renderer.DISPLACEMENT)).
-            times(this.root_);
+            times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.Q)) {
-    this.root_ = discoball.DualQuaternion.fromTranslation(
+    this.camera_ = discoball.DualQuaternion.fromTranslation(
         discoball.Vector.J.times(-discoball.Renderer.DISPLACEMENT)).
-            times(this.root_);
+            times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.RIGHT)) {
-    this.root_ = discoball.DualQuaternion.fromAxisAngle(
-        discoball.Vector.J, discoball.Renderer.ROTATION).times(this.root_);
+    this.camera_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.J, discoball.Renderer.ROTATION).times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.LEFT)) {
-    this.root_ = discoball.DualQuaternion.fromAxisAngle(
-        discoball.Vector.J, -discoball.Renderer.ROTATION).times(this.root_);
+    this.camera_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.J, -discoball.Renderer.ROTATION).times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.DOWN)) {
-    this.root_ = discoball.DualQuaternion.fromAxisAngle(
-        discoball.Vector.I, discoball.Renderer.ROTATION).times(this.root_);
+    this.camera_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.I, discoball.Renderer.ROTATION).times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.UP)) {
-    this.root_ = discoball.DualQuaternion.fromAxisAngle(
-        discoball.Vector.I, -discoball.Renderer.ROTATION).times(this.root_);
+    this.camera_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.I, -discoball.Renderer.ROTATION).times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.GT)) {
-    this.root_ = discoball.DualQuaternion.fromAxisAngle(
-        discoball.Vector.K, discoball.Renderer.ROTATION).times(this.root_);
+    this.camera_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.K, discoball.Renderer.ROTATION).times(this.camera_);
   }
   if (this.keys_.isPressed(discoball.Key.LT)) {
-    this.root_ = discoball.DualQuaternion.fromAxisAngle(
-        discoball.Vector.K, -discoball.Renderer.ROTATION).times(this.root_);
+    this.camera_ = discoball.DualQuaternion.fromAxisAngle(
+        discoball.Vector.K, -discoball.Renderer.ROTATION).times(this.camera_);
   }
 };
