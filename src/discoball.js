@@ -85,7 +85,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   this.root_ = discoball.DualQuaternion.fromTranslation(
       new discoball.Vector(0, 0, -15));
 
-  var ball = new discoball.Ball(10, 128, [1, 1, 1]);
+  var ball = new discoball.Ball(10, 128, [4, 4, 4]);
   b = ball.buildTriangles();
   this.ballVertexCount_ = ball.getTriangleVertexCount();
 
