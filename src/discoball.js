@@ -61,6 +61,178 @@ discoball.Renderer.prototype.getShaderSource = function(id) {
 };
 
 
+discoball.Renderer.CUBE_MAPS = [
+  [
+    'apx.jpg',
+    'anx.jpg',
+    'apy.jpg',
+    'any.jpg',
+    'apz.jpg',
+    'anz.jpg'
+  ],
+  [
+    'bpx.png',
+    'bnx.png',
+    'bpy.png',
+    'bny.png',
+    'bpz.png',
+    'bnz.png'
+  ],
+  [
+    'cpx.png',
+    'cnx.png',
+    'cpy.png',
+    'cny.png',
+    'cpz.png',
+    'cnz.png'
+  ],
+  [
+    'dpx.jpg',
+    'dnx.jpg',
+    'dpy.jpg',
+    'dny.jpg',
+    'dpz.jpg',
+    'dnz.jpg'
+  ],
+  [
+    'epx.png',
+    'enx.png',
+    'epy.png',
+    'eny.png',
+    'epz.png',
+    'enz.png'
+  ],
+  [
+    'fpx.png',
+    'fnx.png',
+    'fpy.png',
+    'fny.png',
+    'fpz.png',
+    'fnz.png'
+  ],
+  [
+    'gpx.png',
+    'gnx.png',
+    'gpy.png',
+    'gny.png',
+    'gpz.png',
+    'gnz.png'
+  ],
+  [
+    'hpx.png',
+    'hnx.png',
+    'hpy.png',
+    'hny.png',
+    'hpz.png',
+    'hnz.png'
+  ],
+  [
+    'ipx.png',
+    'inx.png',
+    'ipy.png',
+    'iny.png',
+    'ipz.png',
+    'inz.png'
+  ],
+  [
+    'jpx.png',
+    'jnx.png',
+    'jpy.png',
+    'jny.png',
+    'jpz.png',
+    'jnz.png'
+  ],
+  [
+    'kpx.jpg',
+    'knx.jpg',
+    'kpy.jpg',
+    'kny.jpg',
+    'kpz.jpg',
+    'knz.jpg'
+  ],
+  [
+    'lpx.png',
+    'lnx.png',
+    'lpy.png',
+    'lny.png',
+    'lpz.png',
+    'lnz.png'
+  ],
+  [
+    'mpx.png',
+    'mnx.png',
+    'mpy.png',
+    'mny.png',
+    'mpz.png',
+    'mnz.png'
+  ],
+  [
+    'npx.jpg',
+    'nnx.jpg',
+    'npy.jpg',
+    'nny.jpg',
+    'npz.jpg',
+    'nnz.jpg'
+  ],
+  [
+    'opx.png',
+    'onx.png',
+    'opy.png',
+    'ony.png',
+    'opz.png',
+    'onz.png'
+  ],
+  [
+    'ppx.jpg',
+    'pnx.jpg',
+    'ppy.jpg',
+    'pny.jpg',
+    'ppz.jpg',
+    'pnz.jpg'
+  ],
+  [
+    'qpx.png',
+    'qnx.png',
+    'qpy.png',
+    'qny.png',
+    'qpz.png',
+    'qnz.png'
+  ],
+  [
+    'rpx.png',
+    'rnx.png',
+    'rpy.png',
+    'rny.png',
+    'rpz.png',
+    'rnz.png'
+  ],
+  [
+    'spx.png',
+    'snx.png',
+    'spy.png',
+    'sny.png',
+    'spz.png',
+    'snz.png'
+  ],
+  [
+    'upx.png',
+    'unx.png',
+    'upy.png',
+    'uny.png',
+    'upz.png',
+    'unz.png'
+  ],
+  [
+    'vpx.png',
+    'vnx.png',
+    'vpy.png',
+    'vny.png',
+    'vpz.png',
+    'vnz.png'
+  ]
+];
+
+
 /**
  * @param {WebGLRenderingContext} gl
  */
@@ -94,18 +266,21 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
-  this.texture_ = this.loadCubeMap(gl, [
-    'apx.jpg',
-    'anx.jpg',
-    'apy.jpg',
-    'any.jpg',
-    'apz.jpg',
-    'anz.jpg'
-  ]);
+  this.cubeMapIndex_ = 0;
+  this.loadCubeMap(gl, this.cubeMapIndex_);
 };
 
 
-discoball.Renderer.prototype.loadCubeMap = function(gl, paths) {
+discoball.Renderer.prototype.loadCubeMap = function(gl, index) {
+  if (this.texture_) {
+    gl.deleteTexture(this.texture_);
+  }
+  this.texture_ = this.loadCubeMapImages(
+      gl, discoball.Renderer.CUBE_MAPS[index]);
+};
+
+
+discoball.Renderer.prototype.loadCubeMapImages = function(gl, paths) {
   var texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
   gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -222,15 +397,29 @@ discoball.Renderer.prototype.onDraw = function(gl) {
         discoball.DualQuaternion.fromAxisAngle(
             discoball.Vector.J, discoball.Renderer.ROTATION/16));
   }
-  this.handleKeys();
+  this.handleKeys(gl);
   this.scenePass(gl);
   gl.flush();
 };
 
 
-discoball.Renderer.prototype.handleKeys = function() {
+discoball.Renderer.prototype.handleKeys = function(gl) {
   if (this.keys_.justPressed(discoball.Key.J)) {
     this.rotate_ = !this.rotate_;
+  }
+  if (this.keys_.justPressed(discoball.Key.N)) {
+    ++this.cubeMapIndex_;
+    if (this.cubeMapIndex_ >= discoball.Renderer.CUBE_MAPS.length) {
+      this.cubeMapIndex_ = 0;
+    }
+    this.loadCubeMap(gl, this.cubeMapIndex_);
+  }
+  if (this.keys_.justPressed(discoball.Key.P)) {
+    --this.cubeMapIndex_;
+    if (this.cubeMapIndex_ < 0) {
+      this.cubeMapIndex_ = discoball.Renderer.CUBE_MAPS.length - 1;
+    }
+    this.loadCubeMap(gl, this.cubeMapIndex_);
   }
   if (this.keys_.isPressed(discoball.Key.W)) {
     this.camera_ = discoball.DualQuaternion.fromTranslation(
