@@ -8,7 +8,7 @@ discoball.Ball = function(radius, n, color) {
 
 
 discoball.Ball.prototype.getTriangleVertexCount = function() {
-  return this.n * this.n * 3;
+  return this.count * 6;
 };
 
 
@@ -23,19 +23,26 @@ discoball.Ball.prototype.point = function(theta, phi) {
 
 discoball.Ball.prototype.buildTriangles = function() {
   var circumference = 2 * Math.PI * this.radius;
+  var tileSize = circumference / this.n;
   var data = [];
+  this.count = 0;
   for (var i = 0; i < this.n/2; ++i) {
     var shift = Math.random();
-    for (var j = 0; j < this.n; ++j) {
-      var theta0 = i * 2 * Math.PI / this.n + 0.0025 * Math.random();
-      var theta1 = (i + 1) * 2 * Math.PI / this.n - 0.0025 * Math.random();
-      var phi0 = j * 2 * Math.PI / this.n + 0.0025 * Math.random() + shift;
-      var phi1 =
-          (j + 1) * 2 * Math.PI / this.n - 0.0025 * Math.random() + shift;
-      var v0 = this.point(theta0, phi0);
-      var v1 = this.point(theta0, phi1);
-      var v2 = this.point(theta1, phi1);
-      var v3 = this.point(theta1, phi0);
+    var theta0 = i * 2 * Math.PI / this.n;
+    var theta1 = (i + 1) * 2 * Math.PI / this.n;
+    var m = Math.floor(Math.sin((theta0+theta1)/2) * circumference / tileSize);
+    this.count += m;
+    for (var j = 0; j < m; ++j) {
+      var phi0 = j * 2 * Math.PI / m;
+      var phi1 = (j + 1) * 2 * Math.PI / m;
+      var dtheta0 = 0.0025 * Math.random();
+      var dtheta1 = -0.0025 * Math.random();
+      var dphi0 = 0.0025 * Math.random() + shift;
+      var dphi1 = -0.0025 * Math.random() + shift;
+      var v0 = this.point(theta0 + dtheta0, phi0 + dphi0);
+      var v1 = this.point(theta0 + dtheta0, phi1 + dphi1);
+      var v2 = this.point(theta1 + dtheta1, phi1 + dphi1);
+      var v3 = this.point(theta1 + dtheta1, phi0 + dphi0);
       var v01 = v0.plus(v1);
       var v12 = v1.plus(v2);
       var v23 = v2.plus(v3);

@@ -94,12 +94,12 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
   this.texture_ = this.loadCubeMap(gl, [
-    'px.png',
-    'nx.png',
-    'py.png',
-    'ny.png',
-    'pz.png',
-    'nz.png'
+    'apx.jpg',
+    'anx.jpg',
+    'apy.jpg',
+    'any.jpg',
+    'apz.jpg',
+    'anz.jpg'
   ]);
 };
 

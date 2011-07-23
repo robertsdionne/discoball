@@ -102,7 +102,7 @@
         highp float dot = dot(normalize(light), vNormal);
         highp float diffuse = max(dot, AMBIENT);
         highp vec3 color = (textureCube(uTexture, normalize(vTexCoord)).xyz
-            + vColor) / 2.;
+            + 0.*vColor) / 1.;
         gl_FragColor = vec4(diffuse * color + vec3(spec), 1.);
       }
     </script>
@@ -124,8 +124,5 @@
     <div style="float: left;">
       <canvas id="c0"></canvas>
     </div>
-    <div class="float">
-    <p><b>ms/frame</b> = <span id="stats"></span></p>
-  </div>
   </body>
 </html>
