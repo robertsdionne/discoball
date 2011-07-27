@@ -126,7 +126,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
 
   this.ball_ = gl.createBuffer();
 
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.1, 0.1, 0.1, 1.0);
 
   this.camera_ = discoball.DualQuaternion.fromTranslation(
       new discoball.Vector(0, 0, -15));
