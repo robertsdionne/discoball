@@ -253,7 +253,7 @@ discoball.Renderer.prototype.render = function(
 };
 
 
-discoball.Renderer.LIGHT_POS = new discoball.Vector(40, 0, -15);
+discoball.Renderer.LIGHT_POS = new discoball.Vector(40, 0, 20);
 
 
 discoball.Renderer.prototype.scenePass = function(gl) {
@@ -265,13 +265,14 @@ discoball.Renderer.prototype.scenePass = function(gl) {
   gl.uniform4fv(this.p_.uCamera, palette);
   palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
   gl.uniform4fv(this.p_.uTransform, palette);
-  var lightPos = discoball.Renderer.LIGHT_POS;
+  var lightPos = this.camera_.transform(discoball.Renderer.LIGHT_POS);
   gl.uniform3f(this.p_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p_, this.ball_, this.ballVertexCount_, gl.TRIANGLES);
   gl.useProgram(this.p3_.handle);
   gl.uniformMatrix4fv(this.p3_.uProjection, false, this.projection_);
   gl.uniform4fv(this.p3_.uTransform, palette);
+  gl.uniform3f(this.p3_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p3_, this.imposter_, this.imposterVertexCount_, gl.TRIANGLES);
 };
@@ -283,7 +284,7 @@ discoball.Renderer.prototype.reflectionPass = function(gl) {
   gl.uniformMatrix4fv(this.p2_.uProjection, false, this.projection_);
   palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
   gl.uniform4fv(this.p2_.uTransform, palette);
-  var lightPos = discoball.Renderer.LIGHT_POS;
+  var lightPos = this.camera_.transform(discoball.Renderer.LIGHT_POS);
   gl.uniform3f(this.p2_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p2_, this.ball_, this.ballVertexCount_, gl.TRIANGLES);

@@ -28,7 +28,7 @@ discoball.Ball.prototype.point = function(theta, phi) {
 
 discoball.Ball.prototype.buildImposter = function() {
   var data = [];
-  var color = [0, 0, 0]
+  var color = new discoball.Vector();
   this.imposterCount = 0;
   for (var i = 0; i < this.n/2; ++i) {
     var shift = Math.random();
@@ -42,33 +42,39 @@ discoball.Ball.prototype.buildImposter = function() {
       var phi0 = j * 2 * Math.PI / this.n;
       var phi1 = (j + 1) * 2 * Math.PI / this.n;
       var v0 = this.point(theta0, phi0).times(.99);
+      var n0 = this.point(theta0, phi0).normalized();
       var v1 = this.point(theta0, phi1).times(.99);
+      var n1 = this.point(theta0, phi1).normalized();
       var v2 = this.point(theta1, phi1).times(.99);
+      var n2 = this.point(theta1, phi1).normalized();
       var v3 = this.point(theta1, phi0).times(.99);
+      var n3 = this.point(theta1, phi0).normalized();
+      var random = new discoball.Vector(
+          Math.random(), Math.random(), Math.random());
       var normal = v0.plus(v1).plus(v2).plus(v3).normalized();
       data.push(v0.x, v0.y, v0.z);
-      data.push(normal.x, normal.y, normal.z);
-      data.push(color[0], color[1], color[2]);
+      data.push(n0.x, n0.y, n0.z);
+      data.push(color.x, color.y, color.z);
       data.push(0);
       data.push(v2.x, v2.y, v2.z);
-      data.push(normal.x, normal.y, normal.z);
-      data.push(color[0], color[1], color[2]);
+      data.push(n2.x, n2.y, n2.z);
+      data.push(color.x, color.y, color.z);
       data.push(0);
       data.push(v1.x, v1.y, v1.z);
-      data.push(normal.x, normal.y, normal.z);
-      data.push(color[0], color[1], color[2]);
+      data.push(n1.x, n1.y, n1.z);
+      data.push(color.x, color.y, color.z);
       data.push(0);
       data.push(v0.x, v0.y, v0.z);
-      data.push(normal.x, normal.y, normal.z);
-      data.push(color[0], color[1], color[2]);
+      data.push(n0.x, n0.y, n0.z);
+      data.push(color.x, color.y, color.z);
       data.push(0);
       data.push(v3.x, v3.y, v3.z);
-      data.push(normal.x, normal.y, normal.z);
-      data.push(color[0], color[1], color[2]);
+      data.push(n3.x, n3.y, n3.z);
+      data.push(color.x, color.y, color.z);
       data.push(0);
       data.push(v2.x, v2.y, v2.z);
-      data.push(normal.x, normal.y, normal.z);
-      data.push(color[0], color[1], color[2]);
+      data.push(n2.x, n2.y, n2.z);
+      data.push(color.x, color.y, color.z);
       data.push(0);
     }
   }

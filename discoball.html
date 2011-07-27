@@ -172,6 +172,10 @@
       uniform vec4 uTransform[2];
 
       attribute vec3 aPosition;
+      attribute vec3 aNormal;
+
+      varying vec3 vPosition;
+      varying vec3 vNormal;
 
       void main() {
         float len = length(uTransform[0]);
@@ -183,12 +187,24 @@
             transf[1].w * transf[0].xyz + cross(transf[0].xyz, transf[1].xyz));
         pos += transl;
 
+        vPosition = pos;
+        vNormal = rotate(transf[0], aNormal);
+
         gl_Position = uProjection * vec4(pos, 1.0);
       }
     </script>
     <script id="f2" type="x-shader/x-fragment">
+      uniform highp vec3 uLightPos;
+
+      varying highp vec3 vPosition;
+      varying highp vec3 vNormal;
+
       void main() {
-        gl_FragColor = vec4(vec3(0.), 1.);
+        highp vec3 light = normalize(uLightPos - vPosition);
+        highp float spec =
+            pow(clamp(length(cross(normalize(vPosition),
+                normalize(light))), 0., 1.), 99.0);
+        gl_FragColor = vec4(vec3(spec), 1.);
       }
     </script>
     <style type="text/css">
