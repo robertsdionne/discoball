@@ -55,27 +55,27 @@ discoball.Ball.prototype.buildImposter = function() {
       data.push(v0.x, v0.y, v0.z);
       data.push(n0.x, n0.y, n0.z);
       data.push(color.x, color.y, color.z);
-      data.push(0);
+      data.push(0, 0);
       data.push(v2.x, v2.y, v2.z);
       data.push(n2.x, n2.y, n2.z);
       data.push(color.x, color.y, color.z);
-      data.push(0);
+      data.push(0, 0);
       data.push(v1.x, v1.y, v1.z);
       data.push(n1.x, n1.y, n1.z);
       data.push(color.x, color.y, color.z);
-      data.push(0);
+      data.push(0, 0);
       data.push(v0.x, v0.y, v0.z);
       data.push(n0.x, n0.y, n0.z);
       data.push(color.x, color.y, color.z);
-      data.push(0);
+      data.push(0, 0);
       data.push(v3.x, v3.y, v3.z);
       data.push(n3.x, n3.y, n3.z);
       data.push(color.x, color.y, color.z);
-      data.push(0);
+      data.push(0, 0);
       data.push(v2.x, v2.y, v2.z);
       data.push(n2.x, n2.y, n2.z);
       data.push(color.x, color.y, color.z);
-      data.push(0);
+      data.push(0, 0);
     }
   }
   return new Float32Array(data);
@@ -119,30 +119,34 @@ discoball.Ball.prototype.buildTriangles = function() {
       var index = Math.floor(Math.random() * 9);
       var normal = [v0, v1, v2, v3, v01, v12, v23, v30, v0123][index].
           normalized();
+      var t0 = new discoball.Vector(.15, .15);
+      var t1 = new discoball.Vector(.15, .85);
+      var t2 = new discoball.Vector(.85, .85);
+      var t3 = new discoball.Vector(.85, .15);
       data.push(v0.x, v0.y, v0.z);
       data.push(normal.x, normal.y, normal.z);
       data.push(this.color[0], this.color[1], this.color[2]);
-      data.push(0);
+      data.push(t0.x, t0.y);
       data.push(v2.x, v2.y, v2.z);
       data.push(normal.x, normal.y, normal.z);
       data.push(this.color[0], this.color[1], this.color[2]);
-      data.push(0);
+      data.push(t2.x, t2.y);
       data.push(v1.x, v1.y, v1.z);
       data.push(normal.x, normal.y, normal.z);
       data.push(this.color[0], this.color[1], this.color[2]);
-      data.push(0);
+      data.push(t1.x, t1.y);
       data.push(v0.x, v0.y, v0.z);
       data.push(normal.x, normal.y, normal.z);
       data.push(this.color[0], this.color[1], this.color[2]);
-      data.push(0);
+      data.push(t0.x, t0.y);
       data.push(v3.x, v3.y, v3.z);
       data.push(normal.x, normal.y, normal.z);
       data.push(this.color[0], this.color[1], this.color[2]);
-      data.push(0);
+      data.push(t3.x, t3.y);
       data.push(v2.x, v2.y, v2.z);
       data.push(normal.x, normal.y, normal.z);
       data.push(this.color[0], this.color[1], this.color[2]);
-      data.push(0);
+      data.push(t2.x, t2.y);
     }
   }
   return new Float32Array(data);

@@ -49,7 +49,7 @@
       attribute vec3 aPosition;
       attribute vec3 aNormal;
       attribute vec3 aColor;
-      attribute float aJoint;
+      attribute vec2 aTexCoord;
 
       // Per vertex varyings
       varying vec3 vPosition;
@@ -120,12 +120,12 @@
       attribute vec3 aPosition;
       attribute vec3 aNormal;
       attribute vec3 aColor;
-      attribute float aJoint;
+      attribute vec2 aTexCoord;
 
       // Per vertex varyings
       varying vec3 vPosition;
       varying vec3 vNormal;
-      varying vec3 vTexCoord;
+      varying vec2 vTexCoord;
       varying vec3 vColor;
 
       void main() {
@@ -154,17 +154,23 @@
           q = vec3(0.);
         }
 
+        vTexCoord = aTexCoord;
         vColor = ab;
         gl_Position = uProjection * vec4(q, 1.0);
         vPosition = pos;
       }
     </script>
     <script id="f1" type="x-shader/x-fragment">
+      uniform sampler2D uTexture;
+
+      varying highp vec2 vTexCoord;
       varying highp vec3 vColor;
 
       void main() {
-        gl_FragColor = vec4(
-            vec3(max(.1, -dot(normalize(vColor), vec3(0., 0., 1.)))), 1.);
+        highp vec3 diffuse = vec3(-dot(normalize(vColor), vec3(0., 0., 1.)));
+        diffuse *= texture2D(uTexture, vTexCoord).rgb;
+        diffuse = max(vec3(.1), diffuse);
+        gl_FragColor = vec4(diffuse, 1.);
       }
     </script>
     <script id="v2" type="x-shader/x-vertex">

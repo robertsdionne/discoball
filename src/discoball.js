@@ -157,6 +157,17 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
+  this.lightTexture_ = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, this.lightTexture_);
+  gl.texParameteri(
+      gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  var image = document.createElement('img');
+  image.onload = this.buildOnLoad(gl, gl.TEXTURE_2D, image, true);
+  image.src = 'light.png';
+
   this.cubeMapIndex_ = 0;
   this.loadCubeMap(gl, this.cubeMapIndex_);
 };
@@ -194,9 +205,13 @@ discoball.Renderer.prototype.loadCubeMapImages = function(gl, paths) {
 };
 
 
-discoball.Renderer.prototype.buildOnLoad = function(gl, face, image) {
+discoball.Renderer.prototype.buildOnLoad = function(
+    gl, target, image, opt_mipmap) {
   return function() {
-    gl.texImage2D(face, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.texImage2D(target, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    if (opt_mipmap) {
+      gl.generateMipmap(target);
+    }
   };
 };
 
@@ -225,19 +240,19 @@ discoball.Renderer.prototype.getFrustumMatrix = function(
 discoball.Renderer.prototype.render = function(
     gl, program, buffer, n, type) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.vertexAttribPointer(program.aPosition, 3, gl.FLOAT, false, 40, 0);
+  gl.vertexAttribPointer(program.aPosition, 3, gl.FLOAT, false, 44, 0);
   gl.enableVertexAttribArray(program.aPosition);
   if (program.aNormal >= 0) {
-    gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 40, 12);
+    gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 44, 12);
     gl.enableVertexAttribArray(program.aNormal);
   }
   if (program.aColor >= 0) {
-    gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 40, 24);
+    gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 44, 24);
     gl.enableVertexAttribArray(program.aColor);
   }
-  if (program.aJoint >= 0) {
-    gl.vertexAttribPointer(program.aJoint, 1, gl.FLOAT, false, 40, 36);
-    gl.enableVertexAttribArray(program.aJoint);
+  if (program.aTexCoord >= 0) {
+    gl.vertexAttribPointer(program.aTexCoord, 2, gl.FLOAT, false, 44, 36);
+    gl.enableVertexAttribArray(program.aTexCoord);
   }
   gl.drawArrays(type, 0, n);
   gl.disableVertexAttribArray(program.aPosition);
@@ -247,8 +262,8 @@ discoball.Renderer.prototype.render = function(
   if (program.aColor >= 0) {
     gl.disableVertexAttribArray(program.aColor);
   }
-  if (program.aJoint >= 0) {
-    gl.disableVertexAttribArray(program.aJoint);
+  if (program.aTexCoord >= 0) {
+    gl.disableVertexAttribArray(program.aTexCoord);
   }
 };
 
