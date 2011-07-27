@@ -61,175 +61,40 @@ discoball.Renderer.prototype.getShaderSource = function(id) {
 };
 
 
+discoball.Renderer.nameCubeMap = function(prefix, suffix) {
+  return [
+    prefix + 'px.' + suffix,
+    prefix + 'nx.' + suffix,
+    prefix + 'py.' + suffix,
+    prefix + 'ny.' + suffix,
+    prefix + 'pz.' + suffix,
+    prefix + 'nz.' + suffix
+  ];
+};
+
+
 discoball.Renderer.CUBE_MAPS = [
-  [
-    'apx.jpg',
-    'anx.jpg',
-    'apy.jpg',
-    'any.jpg',
-    'apz.jpg',
-    'anz.jpg'
-  ],
-  [
-    'bpx.png',
-    'bnx.png',
-    'bpy.png',
-    'bny.png',
-    'bpz.png',
-    'bnz.png'
-  ],
-  [
-    'cpx.png',
-    'cnx.png',
-    'cpy.png',
-    'cny.png',
-    'cpz.png',
-    'cnz.png'
-  ],
-  [
-    'dpx.jpg',
-    'dnx.jpg',
-    'dpy.jpg',
-    'dny.jpg',
-    'dpz.jpg',
-    'dnz.jpg'
-  ],
-  [
-    'epx.png',
-    'enx.png',
-    'epy.png',
-    'eny.png',
-    'epz.png',
-    'enz.png'
-  ],
-  [
-    'fpx.png',
-    'fnx.png',
-    'fpy.png',
-    'fny.png',
-    'fpz.png',
-    'fnz.png'
-  ],
-  [
-    'gpx.png',
-    'gnx.png',
-    'gpy.png',
-    'gny.png',
-    'gpz.png',
-    'gnz.png'
-  ],
-  [
-    'hpx.png',
-    'hnx.png',
-    'hpy.png',
-    'hny.png',
-    'hpz.png',
-    'hnz.png'
-  ],
-  [
-    'ipx.png',
-    'inx.png',
-    'ipy.png',
-    'iny.png',
-    'ipz.png',
-    'inz.png'
-  ],
-  [
-    'jpx.png',
-    'jnx.png',
-    'jpy.png',
-    'jny.png',
-    'jpz.png',
-    'jnz.png'
-  ],
-  [
-    'kpx.jpg',
-    'knx.jpg',
-    'kpy.jpg',
-    'kny.jpg',
-    'kpz.jpg',
-    'knz.jpg'
-  ],
-  [
-    'lpx.png',
-    'lnx.png',
-    'lpy.png',
-    'lny.png',
-    'lpz.png',
-    'lnz.png'
-  ],
-  [
-    'mpx.png',
-    'mnx.png',
-    'mpy.png',
-    'mny.png',
-    'mpz.png',
-    'mnz.png'
-  ],
-  [
-    'npx.jpg',
-    'nnx.jpg',
-    'npy.jpg',
-    'nny.jpg',
-    'npz.jpg',
-    'nnz.jpg'
-  ],
-  [
-    'opx.png',
-    'onx.png',
-    'opy.png',
-    'ony.png',
-    'opz.png',
-    'onz.png'
-  ],
-  [
-    'ppx.jpg',
-    'pnx.jpg',
-    'ppy.jpg',
-    'pny.jpg',
-    'ppz.jpg',
-    'pnz.jpg'
-  ],
-  [
-    'qpx.png',
-    'qnx.png',
-    'qpy.png',
-    'qny.png',
-    'qpz.png',
-    'qnz.png'
-  ],
-  [
-    'rpx.png',
-    'rnx.png',
-    'rpy.png',
-    'rny.png',
-    'rpz.png',
-    'rnz.png'
-  ],
-  [
-    'spx.png',
-    'snx.png',
-    'spy.png',
-    'sny.png',
-    'spz.png',
-    'snz.png'
-  ],
-  [
-    'upx.png',
-    'unx.png',
-    'upy.png',
-    'uny.png',
-    'upz.png',
-    'unz.png'
-  ],
-  [
-    'vpx.png',
-    'vnx.png',
-    'vpy.png',
-    'vny.png',
-    'vpz.png',
-    'vnz.png'
-  ]
+  discoball.Renderer.nameCubeMap('a', 'jpg'),
+  discoball.Renderer.nameCubeMap('b', 'png'),
+  discoball.Renderer.nameCubeMap('c', 'png'),
+  discoball.Renderer.nameCubeMap('d', 'jpg'),
+  discoball.Renderer.nameCubeMap('e', 'png'),
+  discoball.Renderer.nameCubeMap('f', 'png'),
+  discoball.Renderer.nameCubeMap('g', 'png'),
+  discoball.Renderer.nameCubeMap('h', 'png'),
+  discoball.Renderer.nameCubeMap('i', 'png'),
+  discoball.Renderer.nameCubeMap('j', 'png'),
+  discoball.Renderer.nameCubeMap('k', 'jpg'),
+  discoball.Renderer.nameCubeMap('l', 'png'),
+  discoball.Renderer.nameCubeMap('m', 'png'),
+  discoball.Renderer.nameCubeMap('n', 'jpg'),
+  discoball.Renderer.nameCubeMap('o', 'png'),
+  discoball.Renderer.nameCubeMap('p', 'jpg'),
+  discoball.Renderer.nameCubeMap('q', 'png'),
+  discoball.Renderer.nameCubeMap('r', 'png'),
+  discoball.Renderer.nameCubeMap('s', 'png'),
+  discoball.Renderer.nameCubeMap('u', 'png'),
+  discoball.Renderer.nameCubeMap('v', 'png')
 ];
 
 
