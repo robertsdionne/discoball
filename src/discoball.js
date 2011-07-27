@@ -371,7 +371,7 @@ discoball.Renderer.prototype.render = function(
 };
 
 
-discoball.Renderer.LIGHT_POS = new discoball.Vector(0, 0, 20);
+discoball.Renderer.LIGHT_POS = new discoball.Vector(40, 0, -15);
 
 
 discoball.Renderer.prototype.scenePass = function(gl) {
