@@ -164,7 +164,7 @@
 
       void main() {
         gl_FragColor = vec4(
-            vec3(-dot(normalize(vColor), vec3(0., 0., 1.))), 1.);
+            vec3(max(.1, -dot(normalize(vColor), vec3(0., 0., 1.)))), 1.);
       }
     </script>
     <style type="text/css">
