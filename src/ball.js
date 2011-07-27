@@ -12,12 +12,67 @@ discoball.Ball.prototype.getTriangleVertexCount = function() {
 };
 
 
+discoball.Ball.prototype.getImposterVertexCount = function() {
+  return this.imposterCount * 6;
+};
+
+
 discoball.Ball.prototype.point = function(theta, phi) {
   return new discoball.Vector(
     this.radius * Math.sin(theta) * Math.sin(phi),
     this.radius * Math.cos(theta),
     this.radius * Math.sin(theta) * Math.cos(phi)
   );
+};
+
+
+discoball.Ball.prototype.buildImposter = function() {
+  var data = [];
+  var color = [0, 0, 0]
+  this.imposterCount = 0;
+  for (var i = 0; i < this.n/2; ++i) {
+    var shift = Math.random();
+    var theta0 = i * 2 * Math.PI / this.n;
+    var theta1 = (i + 1) * 2 * Math.PI / this.n;
+    var theta = (theta0 + theta1) / 2;
+    var thetacoeff = 0.0025;
+    var phicoeff = thetacoeff / Math.sin(theta);
+    this.imposterCount += this.n;
+    for (var j = 0; j < this.n; ++j) {
+      var phi0 = j * 2 * Math.PI / this.n;
+      var phi1 = (j + 1) * 2 * Math.PI / this.n;
+      var v0 = this.point(theta0, phi0).times(.99);
+      var v1 = this.point(theta0, phi1).times(.99);
+      var v2 = this.point(theta1, phi1).times(.99);
+      var v3 = this.point(theta1, phi0).times(.99);
+      var normal = v0.plus(v1).plus(v2).plus(v3).normalized();
+      data.push(v0.x, v0.y, v0.z);
+      data.push(normal.x, normal.y, normal.z);
+      data.push(color[0], color[1], color[2]);
+      data.push(0);
+      data.push(v2.x, v2.y, v2.z);
+      data.push(normal.x, normal.y, normal.z);
+      data.push(color[0], color[1], color[2]);
+      data.push(0);
+      data.push(v1.x, v1.y, v1.z);
+      data.push(normal.x, normal.y, normal.z);
+      data.push(color[0], color[1], color[2]);
+      data.push(0);
+      data.push(v0.x, v0.y, v0.z);
+      data.push(normal.x, normal.y, normal.z);
+      data.push(color[0], color[1], color[2]);
+      data.push(0);
+      data.push(v3.x, v3.y, v3.z);
+      data.push(normal.x, normal.y, normal.z);
+      data.push(color[0], color[1], color[2]);
+      data.push(0);
+      data.push(v2.x, v2.y, v2.z);
+      data.push(normal.x, normal.y, normal.z);
+      data.push(color[0], color[1], color[2]);
+      data.push(0);
+    }
+  }
+  return new Float32Array(data);
 };
 
 

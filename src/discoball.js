@@ -121,10 +121,20 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   this.p2_.create(gl);
   this.p2_.link(gl);
 
+  vertex = new webgl.Shader('v2',
+      gl.VERTEX_SHADER,
+      this.getShaderSource('quatlib') + this.getShaderSource('v2'));
+  fragment = new webgl.Shader('f2',
+      gl.FRAGMENT_SHADER, this.getShaderSource('f2'));
+  this.p3_ = new webgl.Program(vertex, fragment);
+  this.p3_.create(gl);
+  this.p3_.link(gl);
+
   gl.enable(gl.DEPTH_TEST);
   gl.enable(gl.CULL_FACE);
 
   this.ball_ = gl.createBuffer();
+  this.imposter_ = gl.createBuffer();
 
   gl.clearColor(0.1, 0.1, 0.1, 1.0);
 
@@ -137,6 +147,13 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   this.ballVertexCount_ = ball.getTriangleVertexCount();
 
   gl.bindBuffer(gl.ARRAY_BUFFER, this.ball_);
+  gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
+
+  b = ball.buildImposter();
+  this.imposterVertexCount_ = ball.getImposterVertexCount();
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.imposter_);
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
@@ -252,6 +269,11 @@ discoball.Renderer.prototype.scenePass = function(gl) {
   gl.uniform3f(this.p_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p_, this.ball_, this.ballVertexCount_, gl.TRIANGLES);
+  gl.useProgram(this.p3_.handle);
+  gl.uniformMatrix4fv(this.p3_.uProjection, false, this.projection_);
+  gl.uniform4fv(this.p3_.uTransform, palette);
+  this.render(
+      gl, this.p3_, this.imposter_, this.imposterVertexCount_, gl.TRIANGLES);
 };
 
 
