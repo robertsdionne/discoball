@@ -39,5 +39,6 @@ java -jar lib/closure-compiler/compiler.jar \
   --js src/palette.js \
   --js src/pose.js \
   --js src/discoball.js \
+  --output_wrapper '(function(){%output%})();' \
   --summary_detail_level 3 \
   --warning_level VERBOSE
