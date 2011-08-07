@@ -7,18 +7,37 @@
 
 /**
  * Constructs a new vector from the given coordinates.
- * @param {number} x
- * @param {number} y
- * @param {number} z
+ * @param {number} opt_x
+ * @param {number} opt_y
+ * @param {number} opt_z
  * @constructor
  * @extends {discoball.Quaternion}
  */
-discoball.Vector = function(x, y, z) {
+discoball.Vector = function(opt_x, opt_y, opt_z) {
+  /**
+   * @type {number}
+   */
   this.scalar = 0;
+
+  /**
+   * @type {discoball.Vector}
+   */
   this.vector = this;
-  this.x = x || 0;
-  this.y = y || 0;
-  this.z = z || 0;
+
+  /**
+   * @type {number}
+   */
+  this.x = opt_x || 0;
+
+  /**
+   * @type {number}
+   */
+  this.y = opt_y || 0;
+
+  /**
+   * @type {number}
+   */
+  this.z = opt_z || 0;
 };
 discoball.inherits(discoball.Vector, discoball.Quaternion);
 

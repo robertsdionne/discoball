@@ -14,13 +14,11 @@
 discoball.Quaternion = function(vector, scalar) {
   /**
    * @type {discoball.Vector}
-   * @private
    */
   this.vector = vector || new discoball.Vector();
   
   /**
    * @type {number}
-   * @private
    */
   this.scalar = typeof scalar === "undefined" ? 1 : scalar;
 };
@@ -33,7 +31,7 @@ discoball.Quaternion = function(vector, scalar) {
  */
 discoball.Quaternion.fromAxisAngle = function(axis, angle) {
   return new discoball.Quaternion(
-      axis.normalized().times(Math.sin(angle/2)),
+      /** {discoball.Vector} */ (axis.normalized().times(Math.sin(angle/2))),
       Math.cos(angle/2));
 };
 
@@ -95,9 +93,10 @@ discoball.Quaternion.prototype.plus = function(that) {
     return new discoball.Quaternion(this.vector, this.scalar + that);
   } else if (that instanceof discoball.Quaternion) {
     return new discoball.Quaternion(
-        this.vector.plus(that.vector),
+        /** @type {discoball.Vector} */ (this.vector.plus(that.vector)),
         this.scalar + that.scalar);
   }
+  return null;
 };
 
 
@@ -110,9 +109,10 @@ discoball.Quaternion.prototype.minus = function(that) {
     return new discoball.Quaternion(this.vector, this.scalar - that);
   } else if (that instanceof discoball.Quaternion) {
     return new discoball.Quaternion(
-        this.vector.minus(that.vector),
+        /** @type {discoball.Vector} */ (this.vector.minus(that.vector)),
         this.scalar - that.scalar);
   }
+  return null;
 };
 
 
@@ -123,15 +123,16 @@ discoball.Quaternion.prototype.minus = function(that) {
 discoball.Quaternion.prototype.times = function(that) {
   if (typeof that === 'number') {
     return new discoball.Quaternion(
-        this.vector.times(that),
+        /** @type {discoball.Vector} */ (this.vector.times(that)),
         this.scalar * that);
   } else if (that instanceof discoball.Quaternion) {
     return new discoball.Quaternion(
-        that.vector.times(this.scalar).
+        /** @type {discoball.Vector} */ (that.vector.times(this.scalar).
             plus(this.vector.times(that.scalar)).
-            plus(this.vector.cross(that.vector)),
+            plus(this.vector.cross(that.vector))),
         this.scalar * that.scalar - this.vector.dot(that.vector));
   }
+  return null;
 };
 
 
@@ -142,11 +143,12 @@ discoball.Quaternion.prototype.times = function(that) {
 discoball.Quaternion.prototype.over = function(that) {
   if (typeof that === 'number') {
     return new discoball.Quaternion(
-        this.vector.over(that),
+        /** @type {discoball.Vector} */ (this.vector.over(that)),
         this.scalar / that);
   } else if (that instanceof discoball.Quaternion) {
     return this.times(that.reciprocal());
   }
+  return null;
 };
 
 /**

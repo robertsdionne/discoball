@@ -2,19 +2,42 @@
 java -jar lib/closure-compiler/compiler.jar \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --externs src/externs.js \
+  --jscomp_warning accessControls \
+  --jscomp_warning ambiguousFunctionDecl \
+  --jscomp_warning checkRegExp \
+  --jscomp_warning checkTypes \
+  --jscomp_warning checkVars \
+  --jscomp_warning constantProperty \
+  --jscomp_warning deprecated \
+  --jscomp_warning es5Strict \
+  --jscomp_warning externsValidation \
+  --jscomp_warning fileoverviewTags \
+  --jscomp_warning globalThis \
+  --jscomp_warning internetExplorerChecks \
+  --jscomp_warning invalidCasts \
+  --jscomp_warning missingProperties \
+  --jscomp_warning nonStandardJsDocs \
+  --jscomp_warning strictModuleDepCheck \
+  --jscomp_warning typeInvalidation \
+  --jscomp_warning undefinedVars \
+  --jscomp_warning unknownDefines \
+  --jscomp_warning uselessCode \
+  --jscomp_warning visibility \
+  --js_output_file discoball.js \
+  --js src/app.js \
+  --js src/ball.js \
   --js src/base.js \
-  --js src/quaternion.js \
-  --js src/vector.js \
+  --js src/discoball.js \
   --js src/dualnumber.js \
   --js src/dualquaternion.js \
   --js src/dualvector.js \
-  --js src/ball.js \
-  --js src/app.js \
-  --js src/program.js \
-  --js src/renderer.js \
-  --js src/shader.js \
   --js src/keys.js \
   --js src/palette.js \
   --js src/pose.js \
-  --js src/discoball.js \
-  --js_output_file discoball.js
+  --js src/program.js \
+  --js src/quaternion.js \
+  --js src/renderer.js \
+  --js src/shader.js \
+  --js src/vector.js \
+  --summary_detail_level 3 \
+  --warning_level VERBOSE

@@ -7,18 +7,18 @@
 
 /**
  * Constructs a new vector from the given coordinates.
- * @param {number} x
- * @param {number} y
- * @param {number} z
+ * @param {discoball.DualNumber=} opt_x
+ * @param {discoball.DualNumber=} opt_y
+ * @param {discoball.DualNumber=} opt_z
  * @constructor
  * @extends {discoball.DualQuaternion}
  */
-discoball.DualVector = function(x, y, z) {
+discoball.DualVector = function(opt_x, opt_y, opt_z) {
   this.scalar = new discoball.DualNumber();
   this.vector = this;
-  this.x = x || new discoball.DualNumber();
-  this.y = y || new discoball.DualNumber();
-  this.z = z || new discoball.DualNumber();
+  this.x = opt_x || new discoball.DualNumber();
+  this.y = opt_y || new discoball.DualNumber();
+  this.z = opt_z || new discoball.DualNumber();
 };
 discoball.inherits(discoball.DualVector, discoball.DualQuaternion);
 

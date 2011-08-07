@@ -32,8 +32,8 @@ discoball.global.requestAnimationFrame = (function() {
 
 
 /**
- * @type {Function} child
- * @type {Function} parent
+ * @param {Function} child
+ * @param {Function} parent
  */
 discoball.inherits = function(child, parent) {
   var temp = function() {};
