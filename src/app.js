@@ -40,12 +40,10 @@ webgl.App.WEBGL_CONTEXT = 'experimental-webgl';
  */
 webgl.App.prototype.checkDimensions_ = function() {
   for (var id in this.gls_) {
-    var width = window.innerWidth;
-    var height = window.innerHeight;
+    var width = this.canvases_[id].width;
+    var height = this.canvases_[id].height;
     if (this.widths_[id] !== width ||
         this.heights_[id] !== height) {
-      this.canvases_[id].width = width;
-      this.canvases_[id].height = height;
       this.widths_[id] = width;
       this.heights_[id] = height;
       this.renderers_[id].onChange(this.gls_[id], width, height);
@@ -63,8 +61,6 @@ webgl.App.prototype.checkDimensions_ = function() {
 webgl.App.prototype.install = function(renderers, opt_stats) {
   for (var id in renderers) {
     this.canvases_[id] = discoball.global.document.getElementById(id);
-    this.canvases_[id].width = window.innerWidth;
-    this.canvases_[id].height = window.innerHeight;
     this.gls_[id] = this.canvases_[id].getContext(webgl.App.WEBGL_CONTEXT);
     this.renderers_[id] = renderers[id];
     this.renderers_[id].onCreate(this.gls_[id]);
