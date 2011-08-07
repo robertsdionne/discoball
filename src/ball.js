@@ -35,7 +35,7 @@ discoball.Ball = function(radius, n, color) {
    * @type {?number}
    * @private
    */
-  this.imposterCount_ = null;
+  this.occluderCount_ = null;
 };
 
 
@@ -50,8 +50,8 @@ discoball.Ball.prototype.getTriangleVertexCount = function() {
 /**
  * @return {?number}
  */
-discoball.Ball.prototype.getImposterVertexCount = function() {
-  return this.imposterCount_ * 6;
+discoball.Ball.prototype.getOccluderVertexCount = function() {
+  return this.occluderCount_ * 6;
 };
 
 
@@ -69,10 +69,10 @@ discoball.Ball.prototype.point = function(theta, phi) {
 };
 
 
-discoball.Ball.prototype.buildImposter = function() {
+discoball.Ball.prototype.buildOccluder = function() {
   var data = [];
   var color = new discoball.Vector();
-  this.imposterCount_ = 0;
+  this.occluderCount_ = 0;
   for (var i = 0; i < this.n_/2; ++i) {
     var shift = Math.random();
     var theta0 = i * 2 * Math.PI / this.n_;
@@ -80,7 +80,7 @@ discoball.Ball.prototype.buildImposter = function() {
     var theta = (theta0 + theta1) / 2;
     var thetacoeff = 0.0025;
     var phicoeff = thetacoeff / Math.sin(theta);
-    this.imposterCount_ += this.n_;
+    this.occluderCount_ += this.n_;
     for (var j = 0; j < this.n_; ++j) {
       var phi0 = j * 2 * Math.PI / this.n_;
       var phi1 = (j + 1) * 2 * Math.PI / this.n_;

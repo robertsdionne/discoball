@@ -134,7 +134,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.enable(gl.CULL_FACE);
 
   this.ball_ = gl.createBuffer();
-  this.imposter_ = gl.createBuffer();
+  this.occluder_ = gl.createBuffer();
 
   gl.clearColor(0.1, 0.1, 0.1, 1.0);
 
@@ -150,10 +150,10 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
-  b = ball.buildImposter();
-  this.imposterVertexCount_ = ball.getImposterVertexCount();
+  b = ball.buildOccluder();
+  this.occluderVertexCount_ = ball.getOccluderVertexCount();
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.imposter_);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.occluder_);
   gl.bufferData(gl.ARRAY_BUFFER, b.byteLength, gl.STATIC_DRAW);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, b);
 
@@ -295,7 +295,7 @@ discoball.Renderer.prototype.scenePass = function(gl) {
   gl.uniform4fv(this.p3_['uTransform'], palette);
   gl.uniform3f(this.p3_['uLightPos'], lightPos.x, lightPos.y, lightPos.z);
   this.render(
-      gl, this.p3_, this.imposter_, this.imposterVertexCount_, gl.TRIANGLES);
+      gl, this.p3_, this.occluder_, this.occluderVertexCount_, gl.TRIANGLES);
 };
 
 
