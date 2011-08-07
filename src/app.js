@@ -121,8 +121,8 @@ webgl.App.prototype.onFrame_ = function() {
     this.renderers_[id].onDraw(this.gls_[id]);
   }
   this.keys_.update();
-  discoball.global.setTimeout(
-      discoball.bind(this.onFrame_, this), 1000/60);
+  discoball.global.requestAnimationFrame(
+      discoball.bind(this.onFrame_, this));
 };
 
 
