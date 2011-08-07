@@ -65,10 +65,7 @@ webgl.App.prototype.install = function(renderers, opt_stats) {
     this.canvases_[id] = discoball.global.document.getElementById(id);
     this.canvases_[id].width = window.innerWidth;
     this.canvases_[id].height = window.innerHeight;
-    this.gls_[id] = this.canvases_[id].getContext(webgl.App.WEBGL_CONTEXT,
-    /** @type {WebGLContextAttributes} */ {
-      antialias: true
-    });
+    this.gls_[id] = this.canvases_[id].getContext(webgl.App.WEBGL_CONTEXT);
     this.renderers_[id] = renderers[id];
     this.renderers_[id].onCreate(this.gls_[id]);
   }
