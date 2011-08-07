@@ -56,11 +56,11 @@ discoball.Renderer.prototype.onChange = function(gl, width, height) {
 };
 
 
-discoball.Renderer.prototype.getShaderSource = function(id) {
-  return discoball.global.document.getElementById(id).text;
-};
-
-
+/**
+ * @param {string} prefix
+ * @param {string} suffix
+ * @return {Array.<string>}
+ */
 discoball.Renderer.nameCubeMap = function(prefix, suffix) {
   return [
     prefix + 'px.' + suffix,
@@ -99,33 +99,255 @@ discoball.Renderer.CUBE_MAPS = [
 
 
 /**
+ * @type {string}
+ * @const
+ */
+discoball.Renderer.QUAT_LIB =
+  'vec3 rotate(vec4 q, vec3 v){' +
+    'vec3 r=q.xyz;' +
+    'float a=q.w;' +
+    'return v+cross(2.0*r,cross(r,v)+a*v);' +
+  '}' +
+
+  'vec4 inverse(vec4 q){' +
+    'return vec4(vec3(-1.),1.)*q/dot(q,q);' +
+  '}';
+
+
+/**
+ * @type {string}
+ * @const
+ */
+discoball.Renderer.V0 =
+  // Per skeleton uniforms
+  'uniform mat4 uProjection;' +
+
+  // Per limb uniforms
+  'uniform vec4 uTransform[2];' +
+  'uniform vec4 uCamera[2];' +
+
+  // Per vertex attributes
+  'attribute vec3 aPosition;' +
+  'attribute vec3 aNormal;' +
+  'attribute vec3 aColor;' +
+  'attribute vec2 aTexCoord;' +
+
+  // Per vertex varyings
+  'varying vec3 vPosition;' +
+  'varying vec3 vNormal;' +
+  'varying vec3 vTexCoord;' +
+  'varying vec3 vColor;' +
+
+  'void main(){' +
+    // Dual quaternion transformation code adapted from
+    // Geometric Skinning with Approximate Dual Quaternion Blending:
+    // http://isg.cs.tcd.ie/kavanl/papers/sdq-tog08.pdf
+    // See dqsFast():
+    // http://isg.cs.tcd.ie/kavanl/dq/dqs.cg
+    'float len=length(uTransform[0]);' +
+    'vec4 transf[2];' +
+    'transf[0]=uTransform[0]/len;' +
+    'transf[1]=uTransform[1]/len;' +
+    'vec3 pos=rotate(transf[0],aPosition);' +
+    'vec3 transl=2.0*(transf[0].w*transf[1].xyz-' +
+        'transf[1].w*transf[0].xyz+cross(transf[0].xyz,transf[1].xyz));' +
+    'pos+=transl;' +
+
+    'len=length(uCamera[0]);' +
+    'vec4 camera[2];' +
+    'camera[0]=uCamera[0]/len;' +
+
+    'vNormal=rotate(transf[0],aNormal);' +
+    'vTexCoord=rotate(inverse(camera[0]),reflect(pos,vNormal));' +
+    'vColor=aColor;' +
+    'gl_Position=uProjection*vec4(pos,1.0);' +
+    'vPosition=pos;' +
+  '}';
+
+
+/**
+ * @type {string}
+ * @const
+ */
+discoball.Renderer.F0 =
+  'uniform highp vec3 uLightPos;' +
+  'uniform samplerCube uTexture;' +
+
+  // Per fragment varyings
+  'varying highp vec3 vPosition;' +
+  'varying highp vec3 vNormal;' +
+  'varying highp vec3 vTexCoord;' +
+  'varying lowp vec3 vColor;' +
+
+  'const highp float AMBIENT=0.25;' +
+
+  'void main(){' +
+    'highp vec3 light=uLightPos-vPosition;' +
+    'highp float spec=' +
+        'pow(clamp(-dot(normalize(vPosition),' +
+            'normalize(reflect(-light,vNormal))),0.,1.),99.0);' +
+    'highp float dot=dot(normalize(light),vNormal);' +
+    'highp vec3 diffuse=vec3(max(dot,AMBIENT));' +
+    'highp vec3 color=textureCube(uTexture,normalize(vTexCoord)).xyz' +
+        '*vColor;' +
+    'gl_FragColor=vec4(diffuse*color+vec3(spec),1.);' +
+  '}';
+
+
+/**
+ * @type {string}
+ * @const
+ */
+discoball.Renderer.V1 =
+  // Per skeleton uniforms
+  'uniform mat4 uProjection;' +
+  'uniform highp vec3 uLightPos;' +
+
+  // Per limb uniforms
+  'uniform vec4 uTransform[2];' +
+  'uniform vec4 uCamera[2];' +
+
+  // Per vertex attributes
+  'attribute vec3 aPosition;' +
+  'attribute vec3 aNormal;' +
+  'attribute vec3 aColor;' +
+  'attribute vec2 aTexCoord;' +
+
+  // Per vertex varyings
+  'varying vec3 vPosition;' +
+  'varying vec3 vNormal;' +
+  'varying vec2 vTexCoord;' +
+  'varying vec3 vColor;' +
+
+  'void main(){' +
+     // Dual quaternion transformation code adapted from
+     // Geometric Skinning with Approximate Dual Quaternion Blending:
+     // http://isg.cs.tcd.ie/kavanl/papers/sdq-tog08.pdf
+     // See dqsFast():
+     // http://isg.cs.tcd.ie/kavanl/dq/dqs.cg
+    'float len=length(uTransform[0]);' +
+    'vec4 transf[2];' +
+    'transf[0]=uTransform[0]/len;' +
+    'transf[1]=uTransform[1]/len;' +
+    'vec3 pos=rotate(transf[0],aPosition);' +
+    'vec3 transl=2.0*(transf[0].w*transf[1].xyz-' +
+        'transf[1].w*transf[0].xyz+cross(transf[0].xyz,transf[1].xyz));' +
+    'pos+=transl;' +
+
+    'vNormal=rotate(transf[0],aNormal);' +
+
+    'vec4 plane=vec4(vec3(0.,0.,1.),-100.);' +
+    'vec3 ab=reflect(pos-uLightPos,vNormal);' +
+    'float t=(plane.w-dot(plane.xyz,pos))/(dot(plane.xyz,ab));' +
+    'vec3 q=pos+t*ab;' +
+
+    'if(t<=0.){' +
+      'q=vec3(0.);' +
+    '}' +
+
+    'vTexCoord=aTexCoord;' +
+    'vColor=ab;' +
+    'gl_Position=uProjection*vec4(q,1.0);' +
+    'vPosition=pos;' +
+  '}';
+
+
+/**
+ * @type {string}
+ * @const
+ */
+discoball.Renderer.F1 =
+  'uniform sampler2D uTexture;' +
+
+  'varying highp vec2 vTexCoord;' +
+  'varying highp vec3 vColor;' +
+
+  'void main(){' +
+    'highp vec3 diffuse=vec3(-dot(normalize(vColor),vec3(0.,0.,1.)));' +
+    'diffuse*=texture2D(uTexture,vTexCoord).rgb;' +
+    'diffuse=max(vec3(.1),diffuse);' +
+    'gl_FragColor=vec4(diffuse,1.);' +
+  '}';
+
+
+/**
+ * @type {string}
+ * @const
+ */
+discoball.Renderer.V2 =
+  'uniform mat4 uProjection;' +
+  'uniform vec4 uTransform[2];' +
+
+  'attribute vec3 aPosition;' +
+  'attribute vec3 aNormal;' +
+
+  'varying vec3 vPosition;' +
+  'varying vec3 vNormal;' +
+
+  'void main(){' +
+    'float len=length(uTransform[0]);' +
+    'vec4 transf[2];' +
+    'transf[0]=uTransform[0]/len;' +
+    'transf[1]=uTransform[1]/len;' +
+    'vec3 pos=rotate(transf[0],aPosition);' +
+    'vec3 transl=2.0*(transf[0].w*transf[1].xyz-' +
+        'transf[1].w*transf[0].xyz+cross(transf[0].xyz,transf[1].xyz));' +
+    'pos+=transl;' +
+
+    'vPosition=pos;' +
+    'vNormal=rotate(transf[0],aNormal);' +
+
+    'gl_Position=uProjection*vec4(pos,1.0);' +
+  '}';
+
+
+/**
+ * @type {string}
+ * @const
+ */
+discoball.Renderer.F2 =
+     'uniform highp vec3 uLightPos;' +
+
+     'varying highp vec3 vPosition;' +
+     'varying highp vec3 vNormal;' +
+
+     'void main(){' +
+       'highp vec3 light=normalize(uLightPos-vPosition);' +
+       'highp float spec=' +
+           'pow(clamp(length(cross(normalize(vPosition),' +
+               'normalize(light))),0.,1.),99.0);' +
+       'gl_FragColor=vec4(vec3(spec),1.);' +
+     '}';
+
+
+/**
  * @param {WebGLRenderingContext} gl
  */
 discoball.Renderer.prototype.onCreate = function(gl) {
   this.keys_.install();
   var vertex = new webgl.Shader('v0',
       gl.VERTEX_SHADER,
-      this.getShaderSource('quatlib') + this.getShaderSource('v0'));
+      discoball.Renderer.QUAT_LIB + discoball.Renderer.V0);
   var fragment = new webgl.Shader('f0',
-      gl.FRAGMENT_SHADER, this.getShaderSource('f0'));
+      gl.FRAGMENT_SHADER, discoball.Renderer.F0);
   this.p_ = new webgl.Program(vertex, fragment);
   this.p_.create(gl);
   this.p_.link(gl);
 
   vertex = new webgl.Shader('v1',
       gl.VERTEX_SHADER,
-      this.getShaderSource('quatlib') + this.getShaderSource('v1'));
+      discoball.Renderer.QUAT_LIB + discoball.Renderer.V1);
   fragment = new webgl.Shader('f1',
-      gl.FRAGMENT_SHADER, this.getShaderSource('f1'));
+      gl.FRAGMENT_SHADER, discoball.Renderer.F1);
   this.p2_ = new webgl.Program(vertex, fragment);
   this.p2_.create(gl);
   this.p2_.link(gl);
 
   vertex = new webgl.Shader('v2',
       gl.VERTEX_SHADER,
-      this.getShaderSource('quatlib') + this.getShaderSource('v2'));
+      discoball.Renderer.QUAT_LIB + discoball.Renderer.V2);
   fragment = new webgl.Shader('f2',
-      gl.FRAGMENT_SHADER, this.getShaderSource('f2'));
+      gl.FRAGMENT_SHADER, discoball.Renderer.F2);
   this.p3_ = new webgl.Program(vertex, fragment);
   this.p3_.create(gl);
   this.p3_.link(gl);
