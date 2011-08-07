@@ -2,28 +2,7 @@
 <html>
   <head>
     <script src="discoball.js" type="application/javascript"></script>
-    <script id="f2" type="x-shader/x-fragment">
-      uniform highp vec3 uLightPos;
-
-      varying highp vec3 vPosition;
-      varying highp vec3 vNormal;
-
-      void main() {
-        highp vec3 light = normalize(uLightPos - vPosition);
-        highp float spec =
-            pow(clamp(length(cross(normalize(vPosition),
-                normalize(light))), 0., 1.), 99.0);
-        gl_FragColor = vec4(vec3(spec), 1.);
-      }
-    </script>
     <style type="text/css">
-      body {
-        margin-top: 0px;
-        margin-right: 0px;
-        margin-bottom: 0px;
-        margin-left: 0px;
-        color: white;
-      }
       .float {
         position: absolute;
         top: 0px;
@@ -34,7 +13,7 @@
   </head>
   <body>
     <div class="float">
-      <canvas id="c0"></canvas>
+      <canvas id="c0" width="512" height="512"></canvas>
     </div>
   </body>
 </html>
