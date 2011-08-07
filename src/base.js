@@ -9,21 +9,32 @@ var discoball = {};
 var webgl = {};
 
 
+/**
+ * @type {Window}
+ */
 discoball.global = this;
 
 
+/**
+ * @param {Function} callback
+ * @param {Element=} opt_element
+ */
 discoball.global.requestAnimationFrame = (function() {
   return discoball.global.requestAnimationFrame ||
       discoball.global.webkitRequestAnimationFrame ||
       discoball.global.mozRequestAnimationFrame ||
       discoball.global.oRequestAnimationFrame ||
       discoball.global.msRequestAnimationFrame ||
-      function(callback, element) {
+      function(callback, opt_element) {
         discoball.global.setTimeout(callback, 1000/60);
       };
 })();
 
 
+/**
+ * @type {Function} child
+ * @type {Function} parent
+ */
 discoball.inherits = function(child, parent) {
   var temp = function() {};
   temp.prototype = parent.prototype;
@@ -33,8 +44,13 @@ discoball.inherits = function(child, parent) {
 };
 
 
-discoball.bind = function(fn, self) {
-  var context = self || discoball.global;
+/**
+ * @type {Function} fn
+ * @type {Object=} opt_self
+ * @type {...*} var_args
+ */
+discoball.bind = function(fn, opt_self, var_args) {
+  var context = opt_self || discoball.global;
   if (arguments > 2) {
     var bound = Array.prototype.slice.call(arguments, 2);
     return function() {
@@ -53,6 +69,10 @@ discoball.bind = function(fn, self) {
 discoball.nullFunction = function() {};
 
 
+/**
+ * @type {!Function}
+ * @throws {Error}
+ */
 discoball.abstractMethod = function() {
   throw new Error('Unimplemented abstract method.');
 };

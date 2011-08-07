@@ -2,6 +2,7 @@
 
 /**
  * @param {Array.<!discoball.DualQuaternion>} opt_bones
+ * @constructor
  */
 discoball.Pose = function(opt_bones) {
   /**

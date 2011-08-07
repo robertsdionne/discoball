@@ -7,10 +7,20 @@
 
 /**
  * @param {Window} window The window.
+ * @param {discoball.Keys} keys
  * @constructor
  */
 webgl.App = function(window, keys) {
+  /**
+   * @type {Window}
+   * @private
+   */
   this.window_ = window;
+
+  /**
+   * @type {discoball.Keys}
+   * @private
+   */
   this.keys_ = keys;
   this.reset();
 };
@@ -48,6 +58,7 @@ webgl.App.prototype.checkDimensions_ = function() {
  * Associates this App with the given canvas
  * and starts the rendering loop.
  * @param {Object.<String, webgl.Renderer>} renderers The renderers.
+ * @param {string=} opt_stats
  */
 webgl.App.prototype.install = function(renderers, opt_stats) {
   for (var id in renderers) {
@@ -67,14 +78,27 @@ webgl.App.prototype.install = function(renderers, opt_stats) {
 };
 
 
+/**
+ * @type {number}
+ */
 webgl.App.SMOOTH = 0.25;
 
 
+/**
+ * @param {number} sample
+ * @param {number} average
+ * @param {number} rate
+ * @return {number}
+ */
 webgl.App.prototype.smooth = function(sample, average, rate) {
   return rate * sample + (1 - rate) * average;
 };
 
 
+/**
+ * @param {number} sample
+ * @return {number}
+ */
 webgl.App.prototype.round = function(sample) {
   return Math.round(10 * sample) / 10;
 };
@@ -87,7 +111,7 @@ webgl.App.prototype.round = function(sample) {
 webgl.App.prototype.onFrame_ = function() {
   this.checkDimensions_();
   if (this.stats_ ) {
-    var tick = new Date().getTime();
+    var tick = +new Date;
     var dt = (tick - this.lastTick_) || 1;
     this.smoothDt_ = this.smooth(dt, this.smoothDt_, webgl.App.SMOOTH);
     this.stats_.innerText = this.round(this.smoothDt_) + ' ms';
@@ -115,9 +139,33 @@ webgl.App.prototype.uninstall = function() {
 
 
 webgl.App.prototype.reset = function() {
+  /**
+   * @type {Object.<string, Element>}
+   * @private
+   */
   this.canvases_ = {};
+
+  /**
+   * @type {Object.<string, WebGLRenderingContext>}
+   * @private
+   */
   this.gls_ = {};
+
+  /**
+   * @type {Object.<string, discoball.Renderer>}
+   * @private
+   */
   this.renderers_ = {};
+
+  /**
+   * @type {Object.<string, number>}
+   * @private
+   */
   this.widths_ = {};
+
+  /**
+   * @type {Object.<string, number>}
+   * @private
+   */
   this.heights_ = {};
 };

@@ -1,27 +1,70 @@
 // Copyright 2011 Robert Scott Dionne. All rights reserved.
 
+/**
+ * @param {number} radius
+ * @param {number} n
+ * @param {number} color
+ * @constructor
+ */
 discoball.Ball = function(radius, n, color) {
-  this.radius = radius;
-  this.n = n;
-  this.color = color;
+  /**
+   * @type {number}
+   * @private
+   */
+  this.radius_ = radius;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.n_ = n;
+
+  /**
+   * @type {Array.<number>}
+   * @private
+   */
+  this.color_ = color;
+
+  /**
+   * @type {?number}
+   * @private
+   */
+  this.count_ = null;
+
+  /**
+   * @type {?number}
+   * @private
+   */
+  this.imposterCount_ = null;
 };
 
 
+/**
+ * @return {?number}
+ */
 discoball.Ball.prototype.getTriangleVertexCount = function() {
-  return this.count * 6;
+  return this.count_ * 6;
 };
 
 
+/**
+ * @return {?number}
+ */
 discoball.Ball.prototype.getImposterVertexCount = function() {
-  return this.imposterCount * 6;
+  return this.imposterCount_ * 6;
 };
 
 
+/**
+ * @param {number} theta
+ * @param {number} phi
+ * @return {discoball.Vector}
+ */
 discoball.Ball.prototype.point = function(theta, phi) {
   return new discoball.Vector(
-    this.radius * Math.sin(theta) * Math.sin(phi),
-    this.radius * Math.cos(theta),
-    this.radius * Math.sin(theta) * Math.cos(phi)
+    this.radius_ * Math.sin(theta) * Math.sin(phi),
+    this.radius_ * Math.cos(theta),
+    this.radius_ * Math.sin(theta) * Math.cos(phi)
   );
 };
 
@@ -29,18 +72,18 @@ discoball.Ball.prototype.point = function(theta, phi) {
 discoball.Ball.prototype.buildImposter = function() {
   var data = [];
   var color = new discoball.Vector();
-  this.imposterCount = 0;
-  for (var i = 0; i < this.n/2; ++i) {
+  this.imposterCount_ = 0;
+  for (var i = 0; i < this.n_/2; ++i) {
     var shift = Math.random();
-    var theta0 = i * 2 * Math.PI / this.n;
-    var theta1 = (i + 1) * 2 * Math.PI / this.n;
+    var theta0 = i * 2 * Math.PI / this.n_;
+    var theta1 = (i + 1) * 2 * Math.PI / this.n_;
     var theta = (theta0 + theta1) / 2;
     var thetacoeff = 0.0025;
     var phicoeff = thetacoeff / Math.sin(theta);
-    this.imposterCount += this.n;
-    for (var j = 0; j < this.n; ++j) {
-      var phi0 = j * 2 * Math.PI / this.n;
-      var phi1 = (j + 1) * 2 * Math.PI / this.n;
+    this.imposterCount_ += this.n_;
+    for (var j = 0; j < this.n_; ++j) {
+      var phi0 = j * 2 * Math.PI / this.n_;
+      var phi1 = (j + 1) * 2 * Math.PI / this.n_;
       var v0 = this.point(theta0, phi0).times(.99);
       var n0 = this.point(theta0, phi0).normalized();
       var v1 = this.point(theta0, phi1).times(.99);
@@ -83,19 +126,19 @@ discoball.Ball.prototype.buildImposter = function() {
 
 
 discoball.Ball.prototype.buildTriangles = function() {
-  var circumference = 2 * Math.PI * this.radius;
-  var tileSize = circumference / this.n;
+  var circumference = 2 * Math.PI * this.radius_;
+  var tileSize = circumference / this.n_;
   var data = [];
-  this.count = 0;
-  for (var i = 0; i < this.n/2; ++i) {
+  this.count_ = 0;
+  for (var i = 0; i < this.n_/2; ++i) {
     var shift = Math.random();
-    var theta0 = i * 2 * Math.PI / this.n;
-    var theta1 = (i + 1) * 2 * Math.PI / this.n;
+    var theta0 = i * 2 * Math.PI / this.n_;
+    var theta1 = (i + 1) * 2 * Math.PI / this.n_;
     var theta = (theta0 + theta1) / 2;
     var thetacoeff = 0.0025;
     var phicoeff = thetacoeff / Math.sin(theta);
     var m = Math.floor(Math.sin(theta) * circumference / tileSize);
-    this.count += m;
+    this.count_ += m;
     for (var j = 0; j < m; ++j) {
       var phi0 = j * 2 * Math.PI / m;
       var phi1 = (j + 1) * 2 * Math.PI / m;
@@ -125,27 +168,27 @@ discoball.Ball.prototype.buildTriangles = function() {
       var t3 = new discoball.Vector(.85, .15);
       data.push(v0.x, v0.y, v0.z);
       data.push(normal.x, normal.y, normal.z);
-      data.push(this.color[0], this.color[1], this.color[2]);
+      data.push(this.color_[0], this.color_[1], this.color_[2]);
       data.push(t0.x, t0.y);
       data.push(v2.x, v2.y, v2.z);
       data.push(normal.x, normal.y, normal.z);
-      data.push(this.color[0], this.color[1], this.color[2]);
+      data.push(this.color_[0], this.color_[1], this.color_[2]);
       data.push(t2.x, t2.y);
       data.push(v1.x, v1.y, v1.z);
       data.push(normal.x, normal.y, normal.z);
-      data.push(this.color[0], this.color[1], this.color[2]);
+      data.push(this.color_[0], this.color_[1], this.color_[2]);
       data.push(t1.x, t1.y);
       data.push(v0.x, v0.y, v0.z);
       data.push(normal.x, normal.y, normal.z);
-      data.push(this.color[0], this.color[1], this.color[2]);
+      data.push(this.color_[0], this.color_[1], this.color_[2]);
       data.push(t0.x, t0.y);
       data.push(v3.x, v3.y, v3.z);
       data.push(normal.x, normal.y, normal.z);
-      data.push(this.color[0], this.color[1], this.color[2]);
+      data.push(this.color_[0], this.color_[1], this.color_[2]);
       data.push(t3.x, t3.y);
       data.push(v2.x, v2.y, v2.z);
       data.push(normal.x, normal.y, normal.z);
-      data.push(this.color[0], this.color[1], this.color[2]);
+      data.push(this.color_[0], this.color_[1], this.color_[2]);
       data.push(t2.x, t2.y);
     }
   }

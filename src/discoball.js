@@ -240,30 +240,30 @@ discoball.Renderer.prototype.getFrustumMatrix = function(
 discoball.Renderer.prototype.render = function(
     gl, program, buffer, n, type) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.vertexAttribPointer(program.aPosition, 3, gl.FLOAT, false, 44, 0);
-  gl.enableVertexAttribArray(program.aPosition);
-  if (program.aNormal >= 0) {
-    gl.vertexAttribPointer(program.aNormal, 3, gl.FLOAT, false, 44, 12);
-    gl.enableVertexAttribArray(program.aNormal);
+  gl.vertexAttribPointer(program['aPosition'], 3, gl.FLOAT, false, 44, 0);
+  gl.enableVertexAttribArray(program['aPosition']);
+  if (program['aNormal'] >= 0) {
+    gl.vertexAttribPointer(program['aNormal'], 3, gl.FLOAT, false, 44, 12);
+    gl.enableVertexAttribArray(program['aNormal']);
   }
-  if (program.aColor >= 0) {
-    gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 44, 24);
-    gl.enableVertexAttribArray(program.aColor);
+  if (program['aColor'] >= 0) {
+    gl.vertexAttribPointer(program['aColor'], 3, gl.FLOAT, false, 44, 24);
+    gl.enableVertexAttribArray(program['aColor']);
   }
-  if (program.aTexCoord >= 0) {
-    gl.vertexAttribPointer(program.aTexCoord, 2, gl.FLOAT, false, 44, 36);
-    gl.enableVertexAttribArray(program.aTexCoord);
+  if (program['aTexCoord'] >= 0) {
+    gl.vertexAttribPointer(program['aTexCoord'], 2, gl.FLOAT, false, 44, 36);
+    gl.enableVertexAttribArray(program['aTexCoord']);
   }
   gl.drawArrays(type, 0, n);
-  gl.disableVertexAttribArray(program.aPosition);
-  if (program.aNormal >= 0) {
-    gl.disableVertexAttribArray(program.aNormal);
+  gl.disableVertexAttribArray(program['aPosition']);
+  if (program['aNormal'] >= 0) {
+    gl.disableVertexAttribArray(program['aNormal']);
   }
-  if (program.aColor >= 0) {
-    gl.disableVertexAttribArray(program.aColor);
+  if (program['aColor'] >= 0) {
+    gl.disableVertexAttribArray(program['aColor']);
   }
-  if (program.aTexCoord >= 0) {
-    gl.disableVertexAttribArray(program.aTexCoord);
+  if (program['aTexCoord'] >= 0) {
+    gl.disableVertexAttribArray(program['aTexCoord']);
   }
 };
 
@@ -274,20 +274,20 @@ discoball.Renderer.LIGHT_POS = new discoball.Vector(40, 0, 20);
 discoball.Renderer.prototype.scenePass = function(gl) {
   gl.useProgram(this.p_.handle);
   gl.cullFace(gl.BACK);
-  gl.uniformMatrix4fv(this.p_.uProjection, false, this.projection_);
-  gl.uniform1i(this.p_.uTexture, this.texture_);
+  gl.uniformMatrix4fv(this.p_['uProjection'], false, this.projection_);
+  gl.uniform1i(this.p_['uTexture'], this.texture_);
   var palette = new discoball.Pose([this.camera_]).get();
-  gl.uniform4fv(this.p_.uCamera, palette);
+  gl.uniform4fv(this.p_['uCamera'], palette);
   palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
-  gl.uniform4fv(this.p_.uTransform, palette);
+  gl.uniform4fv(this.p_['uTransform'], palette);
   var lightPos = this.camera_.transform(discoball.Renderer.LIGHT_POS);
-  gl.uniform3f(this.p_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
+  gl.uniform3f(this.p_['uLightPos'], lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p_, this.ball_, this.ballVertexCount_, gl.TRIANGLES);
   gl.useProgram(this.p3_.handle);
-  gl.uniformMatrix4fv(this.p3_.uProjection, false, this.projection_);
-  gl.uniform4fv(this.p3_.uTransform, palette);
-  gl.uniform3f(this.p3_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
+  gl.uniformMatrix4fv(this.p3_['uProjection'], false, this.projection_);
+  gl.uniform4fv(this.p3_['uTransform'], palette);
+  gl.uniform3f(this.p3_['uLightPos'], lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p3_, this.imposter_, this.imposterVertexCount_, gl.TRIANGLES);
 };
@@ -296,11 +296,11 @@ discoball.Renderer.prototype.scenePass = function(gl) {
 discoball.Renderer.prototype.reflectionPass = function(gl) {
   gl.useProgram(this.p2_.handle);
   gl.cullFace(gl.FRONT);
-  gl.uniformMatrix4fv(this.p2_.uProjection, false, this.projection_);
+  gl.uniformMatrix4fv(this.p2_['uProjection'], false, this.projection_);
   palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
-  gl.uniform4fv(this.p2_.uTransform, palette);
+  gl.uniform4fv(this.p2_['uTransform'], palette);
   var lightPos = this.camera_.transform(discoball.Renderer.LIGHT_POS);
-  gl.uniform3f(this.p2_.uLightPos, lightPos.x, lightPos.y, lightPos.z);
+  gl.uniform3f(this.p2_['uLightPos'], lightPos.x, lightPos.y, lightPos.z);
   this.render(
       gl, this.p2_, this.ball_, this.ballVertexCount_, gl.TRIANGLES);
 };

@@ -5,9 +5,21 @@
  * @author robertsdionne@gmail.com (Robert Scott Dionne)
  */
 
-discoball.DualNumber = function(real, dual) {
-  this.real = real || 0;
-  this.dual = dual || 0;
+/**
+ * @param {number=} opt_real
+ * @param {number=} opt_dual
+ * @constructor
+ */
+discoball.DualNumber = function(opt_real, opt_dual) {
+  /**
+   * @type {number}
+   */
+  this.real = opt_real || 0;
+
+  /**
+   * @type {number}
+   */
+  this.dual = opt_dual || 0;
 };
 
 

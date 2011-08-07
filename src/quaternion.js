@@ -26,6 +26,11 @@ discoball.Quaternion = function(vector, scalar) {
 };
 
 
+/**
+ * @param {discoball.Vector} axis
+ * @param {number} angle
+ * @return {!discoball.Quaternion}
+ */
 discoball.Quaternion.fromAxisAngle = function(axis, angle) {
   return new discoball.Quaternion(
       axis.normalized().times(Math.sin(angle/2)),

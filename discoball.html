@@ -1,30 +1,7 @@
 <!-- Copyright 2010 Robert Scott Dionne. All Rights Reserved. -->
 <html>
   <head>
-    <script type="application/javascript">
-      var srcs = [
-        'src/base.js',
-        'src/quaternion.js',
-        'src/vector.js',
-        'src/dualnumber.js',
-        'src/dualquaternion.js',
-        'src/dualvector.js',
-        'src/ball.js',
-        'src/app.js',
-        'src/program.js',
-        'src/renderer.js',
-        'src/shader.js',
-        'src/keys.js',
-        'src/palette.js',
-        'src/pose.js',
-        'src/discoball.js'
-      ];
-      srcs.forEach(function(src) {
-        document.write(
-            '<script type="application/javascript" src="' +
-            src + '"></' + 'script>');
-      });
-    </script>
+    <script src="discoball.js" type="application/javascript"></script>
     <script id="quatlib" type="x-shader/x-vertex">
       vec3 rotate(vec4 q, vec3 v) {
         vec3 r = q.xyz;
