@@ -33,9 +33,10 @@ discoball.global.requestAnimationFrame = (function() {
 
 /**
  * @param {Function} child
- * @param {Function} parent
+ * @param {*} parent
  */
 discoball.inherits = function(child, parent) {
+  /** @constructor */
   var temp = function() {};
   temp.prototype = parent.prototype;
   child.superClass_ = parent.prototype;
@@ -45,13 +46,13 @@ discoball.inherits = function(child, parent) {
 
 
 /**
- * @type {Function} fn
- * @type {Object=} opt_self
- * @type {...*} var_args
+ * @param {Function} fn
+ * @param {Object=} opt_self
+ * @param {...*} var_args
  */
 discoball.bind = function(fn, opt_self, var_args) {
   var context = opt_self || discoball.global;
-  if (arguments > 2) {
+  if (arguments.length > 2) {
     var bound = Array.prototype.slice.call(arguments, 2);
     return function() {
       var newArgs = Array.prototype.slice.call(arguments);

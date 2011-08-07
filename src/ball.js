@@ -3,7 +3,7 @@
 /**
  * @param {number} radius
  * @param {number} n
- * @param {number} color
+ * @param {Array.<number>} color
  * @constructor
  */
 discoball.Ball = function(radius, n, color) {

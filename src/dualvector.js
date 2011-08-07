@@ -73,7 +73,8 @@ discoball.DualVector.prototype.plus = function(that) {
 
 
 /**
- * @return {discoball.DualVector|discoball.DualQuaternion} The difference of this and that.
+ * @return {discoball.DualVector|discoball.DualQuaternion} The difference of
+ *    this and that.
  * @param {discoball.DualVector|number|discoball.DualQuaternion} that
  */
 discoball.DualVector.prototype.minus = function(that) {
@@ -87,22 +88,25 @@ discoball.DualVector.prototype.minus = function(that) {
 
 
 /**
- * @return {discoball.DualVector|discoball.DualQuaternion} The product of this and that.
- * @param {number|discoball.DualQuaternion} that
+ * @return {discoball.DualVector|discoball.DualQuaternion} The product of
+ *    this and that.
+ * @param {discoball.DualNumber|discoball.DualQuaternion} that
  */
 discoball.DualVector.prototype.times = function(that) {
   if (that instanceof discoball.DualNumber) {
     return new discoball.DualVector(
         this.x.times(that), this.y.times(that), this.z.times(that));
   } else {
-    return discoball.DualQuaternion.prototype.times.call(this, that);
+    return /** @type {discoball.DualVector} */ (
+        discoball.DualQuaternion.prototype.times.call(this, that));
   }
 };
 
 
 /**
- * @return {discoball.DualVector|discoball.DualQuaternion} The quotient of this and that.
- * @param {number|discoball.DualQuaternion} that
+ * @return {discoball.DualVector|discoball.DualQuaternion} The quotient of
+ *    this and that.
+ * @param {discoball.DualNumber|discoball.DualQuaternion} that
  */
 discoball.DualVector.prototype.over = function(that) {
   if (that instanceof discoball.DualNumber) {

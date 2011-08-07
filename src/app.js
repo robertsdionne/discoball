@@ -57,7 +57,7 @@ webgl.App.prototype.checkDimensions_ = function() {
 /**
  * Associates this App with the given canvas
  * and starts the rendering loop.
- * @param {Object.<String, webgl.Renderer>} renderers The renderers.
+ * @param {Object.<string, webgl.Renderer>} renderers The renderers.
  * @param {string=} opt_stats
  */
 webgl.App.prototype.install = function(renderers, opt_stats) {
@@ -152,7 +152,7 @@ webgl.App.prototype.reset = function() {
   this.gls_ = {};
 
   /**
-   * @type {Object.<string, discoball.Renderer>}
+   * @type {Object.<string, webgl.Renderer>}
    * @private
    */
   this.renderers_ = {};

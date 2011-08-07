@@ -1,12 +1,12 @@
 // Copyright 2011 Robert Scott Dionne. All rights reserved.
 
 /**
- * @param {Array.<!discoball.DualQuaternion>} opt_bones
+ * @param {Array.<!discoball.DualQuaternion>=} opt_bones
  * @constructor
  */
 discoball.Pose = function(opt_bones) {
   /**
-   * @type {Array.<!discoball.DualQuaternion>}
+   * @type {Array.<discoball.DualQuaternion>}
    * @private
    */
   this.bones_ = opt_bones || [];
@@ -23,25 +23,6 @@ discoball.Pose.prototype.blend = function(that, t) {
   var result = new discoball.Pose();
   for (var i = 0; i < this.bones_.length; ++i) {
     result.set(i, this.bones_[i].lerp(that.bones_[i], t));
-  }
-  return result;
-};
-
-
-/**
- * Globalize this pose.
- * @param {!discoball.Skeleton} skeleton
- * @return {!discoball.Pose}
- */
-discoball.Pose.prototype.globalize = function(skeleton) {
-  var result = new discoball.Pose();
-  for (var thisBone = 0; thisBone < skeleton.joints.length; ++thisBone) {
-    var thatBone = thisBone;
-    result.set(thisBone, this.bones_[thatBone]);
-    while ((thatBone = skeleton.joints[thatBone]) != null) {
-      result.set(thisBone, this.bones_[thatBone].
-          times(result.bones_[thisBone]));
-    }
   }
   return result;
 };
@@ -66,7 +47,8 @@ discoball.Pose.prototype.inverse = function() {
 discoball.Pose.prototype.times = function(that) {
   var result = new discoball.Pose();
   for (var i = 0; i < this.bones_.length; ++i) {
-    result.set(i, this.bones_[i].times(that.bones_[i]));
+    result.set(i, /** @type {discoball.DualQuaternion} */ (
+        this.bones_[i].times(that.bones_[i])));
   }
   return result;
 };
@@ -91,6 +73,14 @@ discoball.Pose.prototype.reset = function() {
  */
 discoball.Pose.prototype.getBone = function(i) {
   return this.bones_[i];
+};
+
+
+/**
+ * @return {number}
+ */
+discoball.Pose.prototype.getNumBones = function() {
+  return this.bones_.length;
 };
 
 

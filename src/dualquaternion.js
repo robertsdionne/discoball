@@ -7,23 +7,21 @@
 
 /**
  * Constructs a new quaternion given the vector and scalar.
- * @param {discoball.DualVector} vector
- * @param {number} scalar
+ * @param {discoball.DualVector=} opt_vector
+ * @param {discoball.DualNumber=} opt_scalar
  * @constructor
  */
-discoball.DualQuaternion = function(vector, scalar) {
+discoball.DualQuaternion = function(opt_vector, opt_scalar) {
   /**
    * @type {discoball.DualVector}
-   * @private
    */
-  this.vector = vector || new discoball.DualVector();
+  this.vector = opt_vector || new discoball.DualVector();
   
   /**
-   * @type {number}
-   * @private
+   * @type {discoball.DualNumber}
    */
-  this.scalar = typeof scalar === "undefined" ?
-      new discoball.DualNumber(1) : scalar;
+  this.scalar = typeof opt_scalar === "undefined" ?
+      new discoball.DualNumber(1) : opt_scalar;
 };
 
 
@@ -79,7 +77,8 @@ discoball.DualQuaternion.prototype.dual = function() {
 discoball.DualQuaternion.prototype.lerp = function(that, t) {
   var v = new discoball.DualNumber(t);
   var u = new discoball.DualNumber(1).minus(v);
-  return this.times(u).plus(that.times(v)).normalized();
+  return this.times(u).plus(/** @type {discoball.DualQuaternion} */ (
+      that.times(v))).normalized();
 };
 
 
@@ -92,7 +91,7 @@ discoball.DualQuaternion.prototype.negate = function() {
 
 
 /**
- * @return {number} The magnitude of this quaternion.
+ * @return {discoball.DualNumber} The magnitude of this quaternion.
  */
 discoball.DualQuaternion.prototype.magnitude = function() {
   return this.magnitudeSquared().sqrt();
@@ -100,7 +99,7 @@ discoball.DualQuaternion.prototype.magnitude = function() {
 
 
 /**
- * @return {number} The square magnitude of this quaternion.
+ * @return {discoball.DualNumber} The square magnitude of this quaternion.
  */
 discoball.DualQuaternion.prototype.magnitudeSquared = function() {
   return this.scalar.times(this.scalar).plus(this.vector.magnitudeSquared());
@@ -146,9 +145,10 @@ discoball.DualQuaternion.prototype.plus = function(that) {
     return new discoball.DualQuaternion(this.vector, this.scalar.plus(that));
   } else if (that instanceof discoball.DualQuaternion) {
     return new discoball.DualQuaternion(
-        this.vector.plus(that.vector),
+        /** @type {discoball.DualVector} */ (this.vector.plus(that.vector)),
         this.scalar.plus(that.scalar));
   }
+  return null;
 };
 
 
@@ -161,49 +161,55 @@ discoball.DualQuaternion.prototype.minus = function(that) {
     return new discoball.DualQuaternion(this.vector, this.scalar.minus(that));
   } else if (that instanceof discoball.DualQuaternion) {
     return new discoball.DualQuaternion(
-        this.vector.minus(that.vector),
+        /** @type {discoball.DualVector} */ (this.vector.minus(that.vector)),
         this.scalar.minus(that.scalar));
   }
+  return null;
 };
 
 
 /**
- * @return {discoball.DualQuaternion} The product of this and that.
- * @param {number|discoball.DualQuaternion} that
+ * @return {discoball.DualQuaternion|discoball.Pose} The product of
+ *    this and that.
+ * @param {discoball.DualNumber|discoball.DualQuaternion|discoball.Pose} that
  */
 discoball.DualQuaternion.prototype.times = function(that) {
   if (that instanceof discoball.DualNumber) {
     return new discoball.DualQuaternion(
-        this.vector.times(that),
+        /** @type {discoball.DualVector} */ (this.vector.times(that)),
         this.scalar.times(that));
   } else if (that instanceof discoball.DualQuaternion) {
     return new discoball.DualQuaternion(
-        that.vector.times(this.scalar).
+        /** @type {discoball.DualVector} */ (that.vector.times(this.scalar).
             plus(this.vector.times(that.scalar)).
-            plus(this.vector.cross(that.vector)),
+            plus(this.vector.cross(that.vector))),
         this.scalar.times(that.scalar).minus(this.vector.dot(that.vector)));
   } else if (that instanceof discoball.Pose) {
     var result = new discoball.Pose();
-    for (var i = 0; i < that.bones_.length; ++i) {
-      result.set(i, this.times(that.bones_[i]));
+    for (var i = 0; i < that.getNumBones(); ++i) {
+      result.set(i, /** @type {discoball.DualQuaternion} */ (
+          this.times(that.getBone(i))));
     }
     return result;
   }
+  return null;
 };
 
 
 /**
  * @return {discoball.DualQuaternion} The quotient of this and that.
- * @param {number|discoball.DualQuaternion} that
+ * @param {discoball.DualNumber|discoball.DualQuaternion} that
  */
 discoball.DualQuaternion.prototype.over = function(that) {
   if (that instanceof discoball.DualNumber) {
     return new discoball.DualQuaternion(
-        this.vector.over(that),
+        /** @type {discoball.DualVector} */ (this.vector.over(that)),
         this.scalar.over(that));
   } else if (that instanceof discoball.DualQuaternion) {
-    return this.times(that.reciprocal());
+    return /** @type {discoball.DualQuaternion} */ (
+        this.times(that.reciprocal()));
   }
+  return null;
 };
 
 /**

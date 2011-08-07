@@ -7,9 +7,9 @@
 
 /**
  * Constructs a new vector from the given coordinates.
- * @param {number} opt_x
- * @param {number} opt_y
- * @param {number} opt_z
+ * @param {number=} opt_x
+ * @param {number=} opt_y
+ * @param {number=} opt_z
  * @constructor
  * @extends {discoball.Quaternion}
  */

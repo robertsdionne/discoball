@@ -26,7 +26,7 @@ discoball.Renderer = function(keys) {
   this.keys_ = keys;
 
   /**
-   * @type {WebGLProgram}
+   * @type {webgl.Program}
    */
   this.p_ = null;
 
@@ -143,7 +143,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   this.spinning_ = new discoball.DualQuaternion();
 
   var ball = new discoball.Ball(10, 128, [4, 4, 4]);
-  b = ball.buildTriangles();
+  var b = ball.buildTriangles();
   this.ballVertexCount_ = ball.getTriangleVertexCount();
 
   gl.bindBuffer(gl.ARRAY_BUFFER, this.ball_);
@@ -164,7 +164,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  var image = document.createElement('img');
+  var image = /** @type {HTMLImageElement} */ (document.createElement('img'));
   image.onload = this.buildOnLoad(gl, gl.TEXTURE_2D, image, true);
   image.src = 'light.png';
 
@@ -196,7 +196,7 @@ discoball.Renderer.prototype.loadCubeMapImages = function(gl, paths) {
     gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
   ];
   for (var i = 0; i < 6; ++i) {
-    var image = document.createElement('img');
+    var image = /** @type {HTMLImageElement} */ (document.createElement('img'));
     var face = faces[i];
     image.onload = this.buildOnLoad(gl, face, image);
     image.src = paths[i];
@@ -205,6 +205,12 @@ discoball.Renderer.prototype.loadCubeMapImages = function(gl, paths) {
 };
 
 
+/**
+ * @param {WebGLRenderingContext} gl
+ * @param {number} target
+ * @param {HTMLImageElement} image
+ * @param {boolean=} opt_mipmap
+ */
 discoball.Renderer.prototype.buildOnLoad = function(
     gl, target, image, opt_mipmap) {
   return function() {
@@ -297,7 +303,7 @@ discoball.Renderer.prototype.reflectionPass = function(gl) {
   gl.useProgram(this.p2_.handle);
   gl.cullFace(gl.FRONT);
   gl.uniformMatrix4fv(this.p2_['uProjection'], false, this.projection_);
-  palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
+  var palette = new discoball.Pose([this.camera_.times(this.spinning_)]).get();
   gl.uniform4fv(this.p2_['uTransform'], palette);
   var lightPos = this.camera_.transform(discoball.Renderer.LIGHT_POS);
   gl.uniform3f(this.p2_['uLightPos'], lightPos.x, lightPos.y, lightPos.z);
