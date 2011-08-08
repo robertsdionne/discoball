@@ -5,20 +5,48 @@
  * @author robertsdionne@gmail.com (Robert Scott Dionne)
  */
 
-discoball.load = function() {
+
+/**
+ * @type {webgl.App}
+ * @private
+ */
+discoball.app_ = null;
+
+
+/**
+ * @param {HTMLCanvasElement} canvas
+ * @export
+ */
+discoball.install = function(canvas) {
+  if (discoball.app_) {
+    discoball.app_.uninstall();
+  }
   var keys = new discoball.Keys(document);
-  new webgl.App(window, keys)
-      .install({
-        'c0': new discoball.Renderer(keys)
-      }, 'stats');
+  discoball.app_ = new webgl.App(window, keys);
+  discoball.app_.install(canvas, new discoball.Renderer(keys));
 };
-window.onload = discoball.load;
+
+
+/**
+ * @export
+ */
+discoball.uninstall = function() {
+  discoball.app_.uninstall();
+  discoball.app_ = null;
+};
+
+
+/**
+ * @export
+ */
+discoball.start = function() {
+  discoball.app_.start();
+};
 
 
 /**
  * @constructor
  * @extends {webgl.Renderer}
- * @export
  */
 discoball.Renderer = function(keys) {
 
@@ -45,11 +73,7 @@ discoball.Renderer = function(keys) {
 goog.inherits(discoball.Renderer, webgl.Renderer);
 
 
-/**
- * @param {WebGLRenderingContext} gl
- * @param {number} width
- * @param {number} height
- */
+/** @inheritDoc */
 discoball.Renderer.prototype.onChange = function(gl, width, height) {
   gl.viewport(0, 0, width, height);
   var aspect = width/height;
@@ -322,9 +346,7 @@ discoball.Renderer.F2 =
      '}';
 
 
-/**
- * @param {WebGLRenderingContext} gl
- */
+/**  @inheritDoc */
 discoball.Renderer.prototype.onCreate = function(gl) {
   this.keys_.install();
   var vertex = new webgl.Shader('v0',
@@ -461,6 +483,10 @@ discoball.Renderer.prototype.getFrustumMatrix = function(
 };
 
 
+/** @inheritDoc */
+discoball.Renderer.prototype.onDestroy = function(gl) {};
+
+
 discoball.Renderer.prototype.render = function(
     gl, program, buffer, n, type) {
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -536,9 +562,7 @@ discoball.Renderer.DISPLACEMENT = 0.1;
 discoball.Renderer.ROTATION = Math.PI/64;
 
 
-/**
- * @param {WebGLRenderingContext} gl
- */
+/** @inheritDoc */
 discoball.Renderer.prototype.onDraw = function(gl) {
   if (this.rotate_) {
     this.spinning_ = this.spinning_.times(

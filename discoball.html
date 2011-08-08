@@ -1,7 +1,6 @@
 <!-- Copyright 2010 Robert Scott Dionne. All Rights Reserved. -->
 <html>
   <head>
-    <script src="discoball.js" type="application/javascript"></script>
     <style type="text/css">
       .float {
         position: absolute;
@@ -10,6 +9,14 @@
         z-index: -1;
       }
     </style>
+    <script src="discoball.js" type="application/javascript"></script>
+    <script type="application/javascript">
+      var load = function() {
+        discoball.install(document.getElementById('c0'));
+        discoball.start();
+      };
+      window.addEventListener('load', load);
+    </script>
   </head>
   <body>
     <div class="float">
