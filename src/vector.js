@@ -39,7 +39,7 @@ discoball.Vector = function(opt_x, opt_y, opt_z) {
    */
   this.z = opt_z || 0;
 };
-discoball.inherits(discoball.Vector, discoball.Quaternion);
+goog.inherits(discoball.Vector, discoball.Quaternion);
 
 
 discoball.Vector.I = new discoball.Vector(1, 0, 0);

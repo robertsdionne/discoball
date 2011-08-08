@@ -7,37 +7,37 @@
 
 /**
  * A WebGL renderer.
- * @interface
+ * @constructor
  */
 webgl.Renderer = function() {};
 
 
-  /**
-   * Handles changes in WebGL canvas size.
-   * @param {WebGLRenderingContext} gl The WebGL rendering context.
-   * @param {number} width The new canvas width.
-   * @param {number} height Thew new canvas height.
-   */
- webgl.Renderer.prototype.onChange;
+/**
+ * Handles changes in WebGL canvas size.
+ * @param {WebGLRenderingContext} gl The WebGL rendering context.
+ * @param {number} width The new canvas width.
+ * @param {number} height Thew new canvas height.
+ */
+webgl.Renderer.prototype.onChange = goog.abstractMethod;
 
 
-  /**
-   * Handles WebGL context creation.
-   * @param {WebGLRenderingContext} gl The WebGL rendering context.
-   */
- webgl.Renderer.prototype.onCreate;
+/**
+ * Handles WebGL context creation.
+ * @param {WebGLRenderingContext} gl The WebGL rendering context.
+ */
+webgl.Renderer.prototype.onCreate = goog.abstractMethod;
 
 
-  /**
-   * Handles WebGL context destruction.
-   * @param {WebGLRenderingContext} gl The WebGL rendering context.
-   */
- webgl.Renderer.prototype.onDestroy;
+/**
+ * Handles WebGL context destruction.
+ * @param {WebGLRenderingContext} gl The WebGL rendering context.
+ */
+webgl.Renderer.prototype.onDestroy = goog.abstractMethod;
 
 
 
-  /**
-   * Handles WebGL drawing.
-   * @param {WebGLRenderingContext} gl The WebGL rendering context.
-   */
- webgl.Renderer.prototype.onDraw;
+/**
+ * Handles WebGL drawing.
+ * @param {WebGLRenderingContext} gl The WebGL rendering context.
+ */
+webgl.Renderer.prototype.onDraw = goog.abstractMethod;

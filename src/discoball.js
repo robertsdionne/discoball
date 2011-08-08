@@ -17,6 +17,8 @@ window.onload = discoball.load;
 
 /**
  * @constructor
+ * @extends {webgl.Renderer}
+ * @export
  */
 discoball.Renderer = function(keys) {
 
@@ -40,7 +42,7 @@ discoball.Renderer = function(keys) {
    */
   this.rotate_ = true;
 };
-discoball.inherits(discoball.Renderer, webgl.Renderer);
+goog.inherits(discoball.Renderer, webgl.Renderer);
 
 
 /**
@@ -442,12 +444,6 @@ discoball.Renderer.prototype.buildOnLoad = function(
     }
   };
 };
-
-
-/**
- * @param {WebGLRenderingContext} gl
- */
-discoball.Renderer.prototype.onDestroy = discoball.nullFunction;
 
 
 discoball.Renderer.prototype.getFrustumMatrix = function(

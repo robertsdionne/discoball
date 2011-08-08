@@ -47,8 +47,8 @@ discoball.Key = {
  *
  */
 discoball.Keys.prototype.install = function() {
-  this.document_.onkeydown = discoball.bind(this.handleKeyDown_, this);
-  this.document_.onkeyup = discoball.bind(this.handleKeyUp_, this);
+  this.document_.onkeydown = goog.bind(this.handleKeyDown_, this);
+  this.document_.onkeyup = goog.bind(this.handleKeyUp_, this);
 };
 
 

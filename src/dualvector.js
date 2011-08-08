@@ -20,7 +20,7 @@ discoball.DualVector = function(opt_x, opt_y, opt_z) {
   this.y = opt_y || new discoball.DualNumber();
   this.z = opt_z || new discoball.DualNumber();
 };
-discoball.inherits(discoball.DualVector, discoball.DualQuaternion);
+goog.inherits(discoball.DualVector, discoball.DualQuaternion);
 
 
 discoball.DualVector.prototype.real = function() {

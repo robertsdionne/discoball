@@ -2,6 +2,7 @@
 java -jar lib/closure-compiler/compiler.jar \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --externs src/externs.js \
+  --generate_exports \
   --jscomp_warning accessControls \
   --jscomp_warning ambiguousFunctionDecl \
   --jscomp_warning checkRegExp \
@@ -24,6 +25,7 @@ java -jar lib/closure-compiler/compiler.jar \
   --jscomp_warning uselessCode \
   --jscomp_warning visibility \
   --js_output_file discoball.js \
+  --js lib/closure/base.js \
   --js src/base.js \
   --js src/quaternion.js \
   --js src/vector.js \
@@ -40,5 +42,6 @@ java -jar lib/closure-compiler/compiler.jar \
   --js src/pose.js \
   --js src/discoball.js \
   --output_wrapper '(function(){%output%})();' \
+  --process_closure_primitives \
   --summary_detail_level 3 \
   --warning_level VERBOSE
