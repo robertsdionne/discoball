@@ -60,7 +60,6 @@ webgl.App.prototype.install = function(canvas, renderer) {
   this.gl_ = /** @type {WebGLRenderingContext} */ (
       this.canvas_.getContext(webgl.App.WEBGL_CONTEXT));
   this.renderer_ = renderer;
-  this.renderer_.onCreate(this.gl_);
 };
 
 
@@ -68,6 +67,7 @@ webgl.App.prototype.install = function(canvas, renderer) {
  * Starts the rendering loop.
  */
 webgl.App.prototype.start = function() {
+  this.renderer_.onCreate(this.gl_);
   this.onFrame_();
 };
 
