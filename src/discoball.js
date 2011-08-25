@@ -15,14 +15,15 @@ discoball.app_ = null;
 
 /**
  * @param {HTMLCanvasElement} canvas
+ * @param {Object.<string, *>=} opt_options
  * @export
  */
-discoball.install = function(canvas) {
+discoball.install = function(canvas, opt_options) {
   if (discoball.app_) {
     discoball.app_.uninstall();
   }
   var keys = new discoball.Keys(document);
-  discoball.app_ = new webgl.App(window, keys);
+  discoball.app_ = new webgl.App(window, keys, opt_options);
   discoball.app_.install(canvas, new discoball.Renderer(keys));
 };
 

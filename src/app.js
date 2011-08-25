@@ -8,9 +8,10 @@
 /**
  * @param {Window} window The window.
  * @param {discoball.Keys} keys
+ * @param {Object.<string, *>=} opt_options
  * @constructor
  */
-webgl.App = function(window, keys) {
+webgl.App = function(window, keys, opt_options) {
   /**
    * @type {Window}
    * @private
@@ -22,6 +23,7 @@ webgl.App = function(window, keys) {
    * @private
    */
   this.keys_ = keys;
+
   this.reset();
 };
 
