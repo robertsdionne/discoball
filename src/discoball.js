@@ -90,12 +90,12 @@ discoball.Renderer.prototype.onChange = function(gl, width, height) {
  */
 discoball.Renderer.nameCubeMap = function(prefix, suffix) {
   return [
-    prefix + 'px.' + suffix,
-    prefix + 'nx.' + suffix,
-    prefix + 'py.' + suffix,
-    prefix + 'ny.' + suffix,
-    prefix + 'pz.' + suffix,
-    prefix + 'nz.' + suffix
+    'res/' + prefix + 'px.' + suffix,
+    'res/' + prefix + 'nx.' + suffix,
+    'res/' + prefix + 'py.' + suffix,
+    'res/' + prefix + 'ny.' + suffix,
+    'res/' + prefix + 'pz.' + suffix,
+    'res/' + prefix + 'nz.' + suffix
   ];
 };
 
