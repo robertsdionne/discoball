@@ -413,7 +413,7 @@ discoball.Renderer.prototype.onCreate = function(gl) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   var image = /** @type {HTMLImageElement} */ (document.createElement('img'));
   image.onload = this.buildOnLoad(gl, gl.TEXTURE_2D, image, true);
-  image.src = 'light.png';
+  image.src = 'res/light.png';
 
   this.cubeMapIndex_ = 0;
   this.loadCubeMap(gl, this.cubeMapIndex_);
