@@ -291,7 +291,7 @@ discoball.Renderer.F1 =
 
   'void main(){' +
     'highp vec3 diffuse=vec3(-dot(normalize(vColor),vec3(0.,0.,1.)));' +
-    'diffuse*=texture2D(uTexture,vTexCoord).rgb;' +
+  //'diffuse*=texture2D(uTexture,vTexCoord).rgb;' +
     'diffuse=max(vec3(.1),diffuse);' +
     'gl_FragColor=vec4(diffuse,1.);' +
   '}';
