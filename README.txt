@@ -4,6 +4,8 @@ February 25, 2012
 
 Discoball is a visualization of a discoball, complete with diffuse and specular lighting, environment map reflection, and projected reflections from the facets onto the back wall. The environment map reflections are not my original artwork.
 
+Video: http://goo.gl/3ax45 OR https://docs.google.com/file/d/0B5t1j58WWjsiMzcwMGFkZTktOGVmNS00NTA2LTkzN2ItYmIwZWJkZDJhM2Ew/edit
+
 Requirements:
 1) Macbook Pro running Mac OS X Snow Leopard.
 2a) Google Chrome 17.0.963.56 or better: http://www.google.com/chrome
