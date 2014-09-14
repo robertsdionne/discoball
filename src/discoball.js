@@ -442,6 +442,7 @@ discoball.Renderer.prototype.loadCubeMapImages = function(gl, paths) {
     gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
     gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
   ];
+  this.faces_loaded_ = 0;
   for (var i = 0; i < 6; ++i) {
     var image = /** @type {HTMLImageElement} */ (document.createElement('img'));
     var face = faces[i];
@@ -460,11 +461,13 @@ discoball.Renderer.prototype.loadCubeMapImages = function(gl, paths) {
  */
 discoball.Renderer.prototype.buildOnLoad = function(
     gl, target, image, opt_mipmap) {
+  var renderer = this;
   return function() {
     gl.texImage2D(target, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
     if (opt_mipmap) {
       gl.generateMipmap(target);
     }
+    renderer.faces_loaded_ += 1;
   };
 };
 
@@ -574,6 +577,9 @@ discoball.Renderer.prototype.onDraw = function(gl) {
   }
   this.handleKeys(gl);
   gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+  if (this.faces_loaded_ < 6) {
+    return;
+  }
   this.scenePass(gl);
   this.reflectionPass(gl);
   gl.flush();
