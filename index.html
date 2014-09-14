@@ -1,14 +1,6 @@
 <!-- Copyright 2010 Robert Scott Dionne. All Rights Reserved. -->
 <html>
   <head>
-    <style type="text/css">
-      .float {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        z-index: -1;
-      }
-    </style>
     <script src="discoball.js" type="application/javascript"></script>
     <script type="application/javascript">
       var load = function() {
@@ -17,10 +9,22 @@
       };
       window.addEventListener('load', load);
     </script>
+    <style type="text/css">
+      body {
+        margin: 0px;
+      }
+      #c {
+        width: 100%;
+        height: 100%;
+      }
+      #container {
+        float: left;
+      }
+    </style>
   </head>
   <body>
-    <div class="float">
-      <canvas id="c0" width="512" height="512"></canvas>
+    <div id="container">
+      <canvas id="c0"></canvas>
     </div>
   </body>
 </html>
