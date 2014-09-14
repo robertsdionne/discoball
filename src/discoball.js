@@ -526,6 +526,8 @@ discoball.Renderer.prototype.scenePass = function(gl) {
   gl.useProgram(this.p_.handle);
   gl.cullFace(gl.BACK);
   gl.uniformMatrix4fv(this.p_['uProjection'], false, this.projection_);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.texture_);
   gl.uniform1i(this.p_['uTexture'], this.texture_);
   var palette = new discoball.Pose([this.camera_]).get();
   gl.uniform4fv(this.p_['uCamera'], palette);
